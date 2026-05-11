@@ -1,0 +1,10 @@
+relationship 283f125c-6a3d-4e9f-b4e3-3ae50ce96f4e
+	joinOnDateBehavior: datePartOnly
+	fromColumn: RAW_DATA.'Order Date'
+	toColumn: LocalDateTable_f0a35986-8432-425d-aea0-cdf0f5efd953.Date
+
+relationship b9daf281-a8a4-490e-9ddf-07323af3cecf
+	joinOnDateBehavior: datePartOnly
+	fromColumn: RAW_DATA.'Ship Date'
+	toColumn: LocalDateTable_d5824e0f-c344-4dbc-bd0b-37f1eb46fe36.Date
+
