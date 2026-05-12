@@ -1,0 +1,313 @@
+table _Measures
+	lineageTag: 3f7047c2-571c-4e5a-a828-a06149a398eb
+
+	measure 'Total Sales' = SUM(fact_Sales[Sales])
+		formatString: \$#,0;(\$#,0);\$#,0
+		lineageTag: 5a55288c-20b7-4b60-b113-19f6a910ec49
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	measure 'Total Profit' = sum(fact_Sales[Profit])
+		formatString: \$#,0;(\$#,0);\$#,0
+		lineageTag: b082fc84-7a9d-4bb4-a800-a077608d0805
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	measure 'Total Orders' = DISTINCTCOUNT(fact_Sales[Order ID])
+		formatString: 0
+		lineageTag: 698be83c-00f6-4606-b526-3eb636144dfd
+
+	measure 'Total Quantity' = sum(fact_Sales[Quantity])
+		formatString: 0
+		lineageTag: 1dfc233e-5217-43aa-810e-d7adb38bbf1f
+
+	measure 'Profit Margin %' = DIVIDE([Total Profit],[Total Sales],0)
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: d70fdb34-3f5e-4ff2-9836-bcbb1116eadb
+
+	measure 'Average Order Value' = DIVIDE([Total Sales], [Total Orders], 0)
+		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		lineageTag: d4e0a1e9-f557-42e5-bb18-d03ad30b17f1
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	measure 'West Sales' =
+			CALCULATE(
+			    [Total Sales],
+			    dim_Region[Region]="West"
+			)
+		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		lineageTag: b55b6300-38a1-4d17-b410-7d912e93ca4f
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	measure 'Sales % of Total' =
+			DIVIDE(
+			    [Total Sales],
+			    CALCULATE(
+			        [Total Sales],
+			        ALL(fact_Sales)
+			    ),
+			    0
+			)
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: c30075d2-af9f-4208-a575-dc23bf934aae
+
+	measure 'Sales % by Category' =
+			DIVIDE(
+			    [Total Sales],
+			    CALCULATE(
+			        [Total Sales],
+			        ALLEXCEPT(
+			            fact_Sales,
+			            dim_Product[Category]
+			        )
+			    ),
+			    0
+			)
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 5cd7358b-1d1d-4037-924c-0f0795a1cb43
+
+	measure 'Profitable Orders' =
+			CALCULATE(
+			    [Total Orders],
+			    fact_Sales[Profit] > 0
+			
+			
+			)
+		formatString: 0
+		lineageTag: e1bb28bd-2a26-4ee0-974f-4f4271b1d37f
+
+	measure 'Sales MTD' =
+			TOTALMTD(
+			    [Total Sales],
+			    dim_Date[Date]
+			)
+		lineageTag: c3d94116-14b8-4d23-81b4-7246b03d270b
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Sales QTD' =
+			
+			TOTALQTD(
+			    [Total Sales],
+			    dim_Date[Date]
+			)
+		lineageTag: e4cfcd33-4c37-4f74-ab92-dd205c1762ed
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Sales YTD' =
+			
+			TOTALYTD(
+			    [Total Sales],
+			    dim_Date[Date]
+			)
+		lineageTag: e7c6fab0-7599-4665-a66f-02ff41d04149
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Sales PY' =
+			CALCULATE(
+			    [Total Sales],
+			    SAMEPERIODLASTYEAR(dim_Date[Date])
+			)
+		lineageTag: bc0e68e1-1bc2-4acf-b7a6-8e8f8c3a2d22
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Sales PM' =
+			CALCULATE(
+			    [Total Sales],
+			    DATEADD(dim_Date[Date],-1,MONTH)
+			)
+		lineageTag: 04fbefc8-0e36-4a73-8705-aa02e07870d2
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Sales PQ' =
+			
+			CALCULATE(
+			    [Total Sales],
+			    DATEADD(dim_Date[Date], -1, QUARTER)
+			)
+		lineageTag: 7c43e424-ee7a-4ffd-98ad-78c71675af8c
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'YoY Growth' = [Total Sales] - [Sales PY]
+		lineageTag: 668384ab-fc90-4196-9d5d-5da9f845a2ab
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'YoY Growth %' =
+			DIVIDE(
+			    [YoY Growth],
+			    [Sales PY],
+			    0
+			)
+		lineageTag: 8c7ec4f0-60e4-4e40-ac8b-610260c11f6e
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'MoM Growth %' =
+			
+			DIVIDE(
+			    [Total Sales] - [Sales PM],
+			    [Sales PM],
+			    0
+			)
+		lineageTag: 522a6d8c-661f-440c-9254-6b370dcef99c
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Average Selling Price' =
+			DIVIDE(
+			    sumx(
+			        fact_Sales,
+			        fact_Sales[Sales] * fact_Sales[Quantity]
+			    ),
+			    sum(fact_Sales[Quantity]),
+			    0
+			    )
+		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		lineageTag: 1ac3d0b7-7e39-4284-ae3e-0d7ae81ade53
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	measure 'Avg Discount %' =
+			
+			AVERAGEX(
+			    fact_Sales,
+			    fact_Sales[Discount]
+			)
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: e9f43d2b-d090-47cf-bb44-ac59aafa2d1d
+
+	measure 'Product Rank' =
+			
+			RANKX(
+			    ALL(dim_Product),
+			    [Total Sales],
+			    ,
+			    DESC,
+			    DENSE
+			)
+		formatString: 0
+		lineageTag: 412e9e17-7fdf-4bbb-89ac-ede3a67bebe1
+
+	measure 'Customer Rank' =
+			
+			RANKX(
+			    ALL(dim_Customer),
+			    [Total Sales],
+			    ,
+			    DESC,
+			    DENSE
+			)
+		formatString: 0
+		lineageTag: 910fca0c-fc94-4556-9e95-264f3313a0d1
+
+	measure 'Is Top 10 Product' =
+			
+			IF(
+			    [Product Rank] <= 10,
+			    "Top 10",
+			    "Others"
+			)
+		lineageTag: b5c1d558-8c62-4b9d-84a5-0e7f089e7ded
+
+	measure 'Sales Performance' =
+			
+			VAR _CurrentSales = [Total Sales]
+			VAR _PreviousSales = [Sales PY]
+			VAR _Growth = DIVIDE(
+			    _CurrentSales - _PreviousSales,
+			    _PreviousSales,
+			    0
+			)
+			RETURN
+			IF(
+			    _Growth >=0 , "Growing" , "Declining"
+			)
+		lineageTag: c1e32aff-2cbd-4359-9923-a45fc28f4c36
+
+	measure 'Sales Performance Status' = ```
+			
+			VAR _CurrentSales = [Total Sales]
+			VAR _PreviousSales = [Sales PY]
+			VAR _GrowthPct = 
+			    DIVIDE(
+			        _CurrentSales - _PreviousSales,
+			        _PreviousSales,
+			        0
+			    )
+			RETURN
+			    SWITCH(
+			        TRUE(),
+			        _GrowthPct >= 0.1,  "🟢 Excellent (>10%)",
+			        _GrowthPct >= 0,    "✅ Growing",
+			        _GrowthPct >= -0.1, "⚠️ Declining",
+			                            "🔴 Critical (>10% drop)"
+			    )
+			```
+		lineageTag: 6c50cdb0-b706-4507-b5b3-84bff12abeb7
+
+	measure 'Profit Category' =
+			
+			VAR _Margin = [Profit Margin %]
+			RETURN
+			    SWITCH(
+			        TRUE(),
+			        _Margin >= 0.2,  "High Margin (>20%)",
+			        _Margin >= 0.1,  "Medium Margin (10-20%)",
+			        _Margin >= 0,    "Low Margin (<10%)",
+			                         "Loss Making"
+			    )
+		lineageTag: 598a79c9-0475-473b-b596-a1db94214eb3
+
+	measure 'Running Total Sales' =
+			
+			CALCULATE(
+			    [Total Sales],
+			    FILTER(
+			        ALL(dim_Date),
+			        dim_Date[Date] <= MAX(dim_Date[Date])
+			    )
+			)
+		formatString: \$#,0;(\$#,0);\$#,0
+		lineageTag: 09a46a62-1b18-4577-bc86-a6e757ebbc6b
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	measure 'Dynamic Title' = ```
+			
+			"Sales Analysis — " & 
+			SELECTEDVALUE(
+			    dim_Date[Year],
+			    "All Years"
+			)
+			```
+		lineageTag: d82e2597-881d-4be4-9f34-875f96e28208
+
+	column dmmy
+		dataType: string
+		lineageTag: ff34c53d-6e6c-4b85-94b2-debccdea8be5
+		summarizeBy: none
+		sourceColumn: dmmy
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition _Measures = m
+		mode: import
+		source =
+				let
+				    Source = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("i44FAA==", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [Column1 = _t]),
+				    #"Renamed Columns" = Table.RenameColumns(Source,{{"Column1", "dmmy"}})
+				in
+				    #"Renamed Columns"
+
+	annotation PBI_ResultType = Table
+
