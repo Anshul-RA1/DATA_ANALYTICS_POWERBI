@@ -7,6 +7,8 @@ table dim_Customer
 		summarizeBy: none
 		sourceColumn: Customer ID
 
+		changedProperty = IsHidden
+
 		annotation SummarizationSetBy = Automatic
 
 	column 'Customer Name'
@@ -15,6 +17,8 @@ table dim_Customer
 		summarizeBy: none
 		sourceColumn: Customer Name
 
+		changedProperty = IsHidden
+
 		annotation SummarizationSetBy = Automatic
 
 	column Segment
@@ -22,6 +26,8 @@ table dim_Customer
 		lineageTag: 5512adca-f608-44ba-936b-bbbeae4053b1
 		summarizeBy: none
 		sourceColumn: Segment
+
+		changedProperty = IsHidden
 
 		annotation SummarizationSetBy = Automatic
 

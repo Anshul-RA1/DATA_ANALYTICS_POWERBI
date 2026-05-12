@@ -7,6 +7,8 @@ table dim_Region
 		summarizeBy: none
 		sourceColumn: Country
 
+		changedProperty = IsHidden
+
 		annotation SummarizationSetBy = Automatic
 
 	column City
@@ -14,6 +16,8 @@ table dim_Region
 		lineageTag: 136936ed-dee7-4a7f-ae74-4b799d25b863
 		summarizeBy: none
 		sourceColumn: City
+
+		changedProperty = IsHidden
 
 		annotation SummarizationSetBy = Automatic
 
@@ -23,6 +27,8 @@ table dim_Region
 		summarizeBy: none
 		sourceColumn: State
 
+		changedProperty = IsHidden
+
 		annotation SummarizationSetBy = Automatic
 
 	column 'Postal Code'
@@ -31,6 +37,8 @@ table dim_Region
 		summarizeBy: none
 		sourceColumn: Postal Code
 
+		changedProperty = IsHidden
+
 		annotation SummarizationSetBy = Automatic
 
 	column Region
@@ -38,6 +46,8 @@ table dim_Region
 		lineageTag: d5d42051-42bb-410f-a2dc-0c5c3826e05e
 		summarizeBy: none
 		sourceColumn: Region
+
+		changedProperty = IsHidden
 
 		annotation SummarizationSetBy = Automatic
 
