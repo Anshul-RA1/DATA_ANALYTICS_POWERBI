@@ -1,0 +1,50 @@
+table dim_Product
+	lineageTag: 28bc99b8-e5c5-4036-a97b-54b204e2881a
+
+	column 'Product ID'
+		dataType: string
+		lineageTag: c2cfe11b-f794-4131-8f32-0f6aae6854e2
+		summarizeBy: none
+		sourceColumn: Product ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Category
+		dataType: string
+		lineageTag: 097ec70c-9553-4ca1-ade7-4a0ef6be7d3e
+		summarizeBy: none
+		sourceColumn: Category
+
+		annotation SummarizationSetBy = Automatic
+
+	column Sub-Category
+		dataType: string
+		lineageTag: e38bde18-9a18-4fd9-b9f1-f408bd2baf3a
+		summarizeBy: none
+		sourceColumn: Sub-Category
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Product Name'
+		dataType: string
+		lineageTag: 9fa46e24-eb05-4879-b3fa-ab5e92cb4a78
+		summarizeBy: none
+		sourceColumn: Product Name
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_Product = m
+		mode: import
+		source =
+				let
+				    Source = RAW_DATA,
+				    #"Removed Columns" = Table.RemoveColumns(Source,{"Row ID", "Order ID", "Order Date", "Ship Date", "Ship Mode", "Customer ID", "Customer Name", "Segment", "Country", "City", "State", "Postal Code", "Region"}),
+				    #"Removed Other Columns" = Table.SelectColumns(#"Removed Columns",{"Product ID", "Category", "Sub-Category", "Product Name"}),
+				    #"Removed Duplicates" = Table.Distinct(#"Removed Other Columns", {"Product ID"})
+				in
+				    #"Removed Duplicates"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
