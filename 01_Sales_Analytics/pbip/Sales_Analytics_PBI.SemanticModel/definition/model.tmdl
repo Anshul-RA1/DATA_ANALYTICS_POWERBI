@@ -8,14 +8,17 @@ model Model
 
 annotation __PBI_TimeIntelligenceEnabled = 1
 
-annotation PBI_QueryOrder = ["RAW_DATA"]
+annotation PBI_QueryOrder = ["RAW_DATA","dim_Customer","dim_Product","dim_Region","fact_Sales","dim_Date"]
 
 annotation PBI_ProTooling = ["DevMode"]
 
-ref table RAW_DATA
-ref table DateTableTemplate_1c3ec484-8f0d-4b5a-9375-71d83bc4a263
-ref table LocalDateTable_f0a35986-8432-425d-aea0-cdf0f5efd953
-ref table LocalDateTable_d5824e0f-c344-4dbc-bd0b-37f1eb46fe36
+ref table dim_Customer
+ref table dim_Product
+ref table dim_Region
+ref table fact_Sales
+ref table DateTableTemplate_a606c9e6-b635-4ddf-bb74-ac0ec0b79c42
+ref table LocalDateTable_cc5902cb-0a38-496d-a60f-e2c0835441bf
+ref table dim_Date
 
 ref cultureInfo en-US
 

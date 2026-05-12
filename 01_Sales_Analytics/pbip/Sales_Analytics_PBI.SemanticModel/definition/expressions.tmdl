@@ -1,0 +1,14 @@
+expression RAW_DATA =
+		let
+		    Source = Excel.Workbook(File.Contents("C:\Users\HP\Desktop\DATA_ANALYTICS_POWERBI\01_Sales_Analytics\data\Sample - Superstore.xlsx"), null, true),
+		    RAW_DATA_Sheet = Source{[Item="RAW_DATA",Kind="Sheet"]}[Data],
+		    #"Promoted Headers" = Table.PromoteHeaders(RAW_DATA_Sheet, [PromoteAllScalars=true]),
+		    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"Row ID", Int64.Type}, {"Order ID", type text}, {"Order Date", type date}, {"Ship Date", type date}, {"Ship Mode", type text}, {"Customer ID", type text}, {"Customer Name", type text}, {"Segment", type text}, {"Country", type text}, {"City", type text}, {"State", type text}, {"Postal Code", type text}, {"Region", type text}, {"Product ID", type text}, {"Category", type text}, {"Sub-Category", type text}, {"Product Name", type text}, {"Quantity", Int64.Type}, {"Sales", type number}, {"Discount", Percentage.Type}, {"Profit", type number}})
+		in
+		    #"Changed Type"
+	lineageTag: 0a05bfbf-b04f-4759-8c60-5f546863247a
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

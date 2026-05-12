@@ -1,0 +1,143 @@
+table fact_Sales
+	lineageTag: 247d2808-8dcf-487f-8392-e38e42ef9905
+
+	column 'Row ID'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 10b00b81-d536-4296-9ee7-b2b132148ca3
+		summarizeBy: count
+		sourceColumn: Row ID
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Order ID'
+		dataType: string
+		lineageTag: 965baae1-ad28-421e-99b7-c9f8aa15f560
+		summarizeBy: none
+		sourceColumn: Order ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Order Date'
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 51f83743-8683-47e4-9d1d-06f962569552
+		summarizeBy: none
+		sourceColumn: Order Date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Ship Date'
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 9fcfa4d9-fa28-46f6-9e00-a5c9d385b6f1
+		summarizeBy: none
+		sourceColumn: Ship Date
+
+		variation Variation
+			isDefault
+			relationship: 06515206-3a0f-4b0c-ba4b-873f6a9ab511
+			defaultHierarchy: LocalDateTable_cc5902cb-0a38-496d-a60f-e2c0835441bf.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Ship Mode'
+		dataType: string
+		lineageTag: 3eac6228-af71-48e0-8850-759e8cc41a69
+		summarizeBy: none
+		sourceColumn: Ship Mode
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Customer ID'
+		dataType: string
+		isHidden
+		lineageTag: 8d3b7e63-f27e-4e46-b768-01e5738c1300
+		summarizeBy: none
+		sourceColumn: Customer ID
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Postal Code'
+		dataType: string
+		isHidden
+		lineageTag: 2cedeef5-03d8-4230-9792-92aefeb5d958
+		summarizeBy: none
+		sourceColumn: Postal Code
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Product ID'
+		dataType: string
+		isHidden
+		lineageTag: 092b302d-431b-4a5d-b31b-488d6dc4b2e2
+		summarizeBy: none
+		sourceColumn: Product ID
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Sales
+		dataType: double
+		lineageTag: 6e43af25-abda-4073-9167-15b4b539e09f
+		summarizeBy: sum
+		sourceColumn: Sales
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Quantity
+		dataType: int64
+		formatString: 0
+		lineageTag: 362950a3-861b-4c97-88f2-3b501c3539d7
+		summarizeBy: sum
+		sourceColumn: Quantity
+
+		annotation SummarizationSetBy = Automatic
+
+	column Discount
+		dataType: double
+		lineageTag: fa2df0ee-76cc-4446-85a5-362d9b380ed6
+		summarizeBy: sum
+		sourceColumn: Discount
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Profit
+		dataType: double
+		lineageTag: b9e4a489-ce13-4176-a5c4-e8f8dd15903e
+		summarizeBy: sum
+		sourceColumn: Profit
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition fact_Sales = m
+		mode: import
+		source =
+				let
+				    Source = RAW_DATA,
+				    #"Removed Other Columns" = Table.SelectColumns(Source,{"Row ID", "Order ID", "Order Date", "Ship Date", "Ship Mode", "Customer ID", "Postal Code", "Product ID", "Sales", "Quantity", "Discount", "Profit"})
+				in
+				    #"Removed Other Columns"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
