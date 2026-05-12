@@ -10,6 +10,8 @@ table dim_Date
 		summarizeBy: none
 		sourceColumn: Date
 
+		changedProperty = IsHidden
+
 		annotation SummarizationSetBy = Automatic
 
 		annotation UnderlyingDateTimeDataType = Date
@@ -21,6 +23,8 @@ table dim_Date
 		summarizeBy: sum
 		sourceColumn: Year
 
+		changedProperty = IsHidden
+
 		annotation SummarizationSetBy = Automatic
 
 	column Quarter
@@ -28,6 +32,8 @@ table dim_Date
 		lineageTag: c78348cd-3fff-4d7b-b10c-8e865ed819de
 		summarizeBy: none
 		sourceColumn: Quarter
+
+		changedProperty = IsHidden
 
 		annotation SummarizationSetBy = Automatic
 
@@ -38,6 +44,8 @@ table dim_Date
 		summarizeBy: sum
 		sourceColumn: Month Number
 
+		changedProperty = IsHidden
+
 		annotation SummarizationSetBy = Automatic
 
 	column 'Month Name'
@@ -45,6 +53,8 @@ table dim_Date
 		lineageTag: 6c121e01-727a-4274-a939-ac4169c78102
 		summarizeBy: none
 		sourceColumn: Month Name
+
+		changedProperty = IsHidden
 
 		annotation SummarizationSetBy = Automatic
 
@@ -55,6 +65,8 @@ table dim_Date
 		summarizeBy: sum
 		sourceColumn: Week Number
 
+		changedProperty = IsHidden
+
 		annotation SummarizationSetBy = Automatic
 
 	column Weekday
@@ -62,6 +74,8 @@ table dim_Date
 		lineageTag: e4f98ac1-ca5e-40d4-b247-a2a1a03ad0a4
 		summarizeBy: none
 		sourceColumn: Weekday
+
+		changedProperty = IsHidden
 
 		annotation SummarizationSetBy = Automatic
 
@@ -71,6 +85,8 @@ table dim_Date
 		lineageTag: 9a21de7e-fd4c-4997-814f-4e50c50426d5
 		summarizeBy: none
 		sourceColumn: Is Weekend
+
+		changedProperty = IsHidden
 
 		annotation SummarizationSetBy = Automatic
 
