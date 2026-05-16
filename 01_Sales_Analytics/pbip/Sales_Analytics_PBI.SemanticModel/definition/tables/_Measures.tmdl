@@ -2,7 +2,7 @@ table _Measures
 	lineageTag: 3f7047c2-571c-4e5a-a828-a06149a398eb
 
 	measure 'Total Sales' = SUM(fact_Sales[Sales])
-		formatString: \$#,0;(\$#,0);\$#,0
+		formatString: \$#,0.0;(\$#,0.0);\$#,0.0
 		lineageTag: 5a55288c-20b7-4b60-b113-19f6a910ec49
 
 		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
@@ -112,9 +112,10 @@ table _Measures
 			    [Total Sales],
 			    SAMEPERIODLASTYEAR(dim_Date[Date])
 			)
+		formatString: \$#,0;(\$#,0);\$#,0
 		lineageTag: bc0e68e1-1bc2-4acf-b7a6-8e8f8c3a2d22
 
-		annotation PBI_FormatHint = {"isGeneralNumber":true}
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
 
 	measure 'Sales PM' =
 			CALCULATE(
@@ -146,9 +147,8 @@ table _Measures
 			    [Sales PY],
 			    0
 			)
+		formatString: 0.00%;-0.00%;0.00%
 		lineageTag: 8c7ec4f0-60e4-4e40-ac8b-610260c11f6e
-
-		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	measure 'MoM Growth %' =
 			

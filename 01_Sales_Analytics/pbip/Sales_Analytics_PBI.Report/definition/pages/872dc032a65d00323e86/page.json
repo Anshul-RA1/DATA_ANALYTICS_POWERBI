@@ -1,7 +1,7 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.1.0/schema.json",
-  "name": "753c925623a9c931ed97",
-  "displayName": "Executive Overview",
+  "name": "872dc032a65d00323e86",
+  "displayName": "Customer Insights",
   "displayOption": "FitToPage",
   "height": 720,
   "width": 1280,
@@ -9,17 +9,6 @@
     "background": [
       {
         "properties": {
-          "color": {
-            "solid": {
-              "color": {
-                "expr": {
-                  "Literal": {
-                    "Value": "'#1E2130'"
-                  }
-                }
-              }
-            }
-          },
           "transparency": {
             "expr": {
               "Literal": {
@@ -36,7 +25,7 @@
           "width": {
             "expr": {
               "Literal": {
-                "Value": "183L"
+                "Value": "368L"
               }
             }
           }

@@ -1,0 +1,1520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>DAX Measures Cheat Sheet | Anshul-RA1</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --bg: #080a0f;
+  --bg2: #0d1018;
+  --surface: #12161f;
+  --surface2: #181d28;
+  --border: #1e2535;
+  --border2: #252d40;
+  --gold: #f0b429;
+  --gold2: #e8a800;
+  --teal: #00d4b4;
+  --blue: #4facfe;
+  --purple: #b794f4;
+  --red: #fc8181;
+  --green: #68d391;
+  --amber: #fbb040;
+  --pink: #f687b3;
+  --text: #e2e8f0;
+  --text2: #a0aec0;
+  --text3: #718096;
+  --font: 'DM Sans', sans-serif;
+  --display: 'Bebas Neue', sans-serif;
+  --mono: 'JetBrains Mono', monospace;
+}
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* ── HERO ── */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 60px 24px;
+  position: relative;
+  overflow: hidden;
+}
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 0%, rgba(240,180,41,0.12) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 40% at 80% 60%, rgba(79,172,254,0.06) 0%, transparent 60%);
+}
+.grid-overlay {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(240,180,41,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(240,180,41,0.03) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+.hero-content { position: relative; z-index: 1; max-width: 800px; }
+.eyebrow {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--gold);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(240,180,41,0.08);
+  border: 1px solid rgba(240,180,41,0.2);
+  padding: 6px 16px;
+  border-radius: 100px;
+  margin-bottom: 28px;
+}
+.eyebrow-dot {
+  width: 5px; height: 5px;
+  background: var(--gold);
+  border-radius: 50%;
+  animation: blink 1.4s ease-in-out infinite;
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
+.hero h1 {
+  font-family: var(--display);
+  font-size: clamp(4rem, 10vw, 9rem);
+  letter-spacing: 0.05em;
+  line-height: 0.9;
+  margin-bottom: 20px;
+  color: var(--text);
+}
+.hero h1 .gold { color: var(--gold); }
+.hero-sub {
+  font-size: 1rem;
+  color: var(--text2);
+  font-family: var(--mono);
+  font-weight: 300;
+  margin-bottom: 48px;
+}
+.stats {
+  display: flex;
+  gap: 0;
+  justify-content: center;
+  border: 1px solid var(--border2);
+  border-radius: 16px;
+  overflow: hidden;
+  background: var(--surface);
+}
+.stat {
+  flex: 1;
+  padding: 20px 24px;
+  border-right: 1px solid var(--border2);
+  text-align: center;
+}
+.stat:last-child { border-right: none; }
+.stat-n {
+  font-family: var(--display);
+  font-size: 2.8rem;
+  color: var(--gold);
+  line-height: 1;
+  display: block;
+  letter-spacing: 0.05em;
+}
+.stat-l {
+  font-size: 0.7rem;
+  color: var(--text3);
+  font-family: var(--mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/* ── TOC ── */
+.toc {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 60px 24px;
+}
+.toc-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+}
+.toc-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  text-decoration: none;
+  transition: all 0.2s;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.toc-card:hover { border-color: var(--gold); transform: translateY(-2px); }
+.toc-icon { font-size: 1.4rem; }
+.toc-num { font-family: var(--mono); font-size: 0.62rem; color: var(--text3); letter-spacing: 0.1em; }
+.toc-name { font-size: 0.82rem; font-weight: 600; color: var(--text); }
+.toc-count { font-size: 0.7rem; color: var(--text3); font-family: var(--mono); }
+
+/* ── SECTION LAYOUT ── */
+.section {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 48px 24px;
+}
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 32px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border);
+}
+.cat-badge {
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 4px 12px;
+  border-radius: 100px;
+  border: 1px solid;
+}
+.section-title {
+  font-family: var(--display);
+  font-size: 2.2rem;
+  letter-spacing: 0.05em;
+  flex: 1;
+}
+.section-icon { font-size: 2rem; }
+
+/* ── MEASURE CARD ── */
+.measures-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.measure-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+  transition: border-color 0.2s;
+}
+.measure-card:hover { border-color: rgba(240,180,41,0.3); }
+.measure-top {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+}
+.measure-info {
+  padding: 22px 24px;
+  border-right: 1px solid var(--border);
+}
+.measure-num {
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  color: var(--text3);
+  letter-spacing: 0.15em;
+  margin-bottom: 6px;
+}
+.measure-name {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+.measure-def {
+  font-size: 0.82rem;
+  color: var(--text2);
+  line-height: 1.6;
+}
+.measure-meta {
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  justify-content: center;
+}
+.meta-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.75rem;
+}
+.meta-label {
+  color: var(--text3);
+  font-family: var(--mono);
+  min-width: 80px;
+}
+.meta-val {
+  color: var(--text);
+  font-weight: 500;
+}
+.tag {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  padding: 2px 8px;
+  border-radius: 100px;
+  border: 1px solid;
+}
+
+/* ── CODE BLOCK ── */
+.code-block {
+  background: var(--bg2);
+  border-top: 1px solid var(--border);
+  overflow-x: auto;
+}
+.code-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 16px;
+  border-bottom: 1px solid var(--border);
+}
+.code-lang {
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  color: var(--text3);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.code-dots { display: flex; gap: 5px; }
+.code-dot { width: 8px; height: 8px; border-radius: 50%; }
+pre {
+  padding: 18px 20px;
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  line-height: 1.8;
+  color: var(--text2);
+  white-space: pre;
+}
+.kw { color: var(--gold); font-weight: 500; }
+.fn { color: var(--purple); }
+.str { color: var(--green); }
+.cm { color: var(--text3); font-style: italic; }
+.num { color: var(--teal); }
+.op { color: var(--amber); }
+.var { color: var(--blue); }
+
+/* ── QA SECTION ── */
+.qa-section {
+  padding: 20px 24px;
+  border-top: 1px solid var(--border);
+  background: rgba(240,180,41,0.02);
+}
+.qa-label {
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.qa-item { margin-bottom: 14px; }
+.qa-q {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 6px;
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+}
+.qa-q-icon { color: var(--gold); flex-shrink: 0; }
+.qa-a {
+  font-size: 0.8rem;
+  color: var(--text2);
+  line-height: 1.7;
+  padding-left: 18px;
+  border-left: 2px solid rgba(240,180,41,0.2);
+  margin-left: 4px;
+}
+
+/* ── SEPARATOR ── */
+hr { border: none; border-top: 1px solid var(--border); }
+
+/* ── CATEGORY COLORS ── */
+.c1 { --cc: #68d391; }
+.c2 { --cc: #4facfe; }
+.c3 { --cc: #f0b429; }
+.c4 { --cc: #b794f4; }
+.c5 { --cc: #fc8181; }
+.c6 { --cc: #00d4b4; }
+.cat-badge { background: rgba(var(--cc-r,104),var(--cc-g,211),var(--cc-b,145),0.1); color: var(--cc); border-color: var(--cc); }
+
+.c1 .cat-badge { background:rgba(104,211,145,0.1); color:#68d391; border-color:#68d391; }
+.c2 .cat-badge { background:rgba(79,172,254,0.1); color:#4facfe; border-color:#4facfe; }
+.c3 .cat-badge { background:rgba(240,180,41,0.1); color:#f0b429; border-color:#f0b429; }
+.c4 .cat-badge { background:rgba(183,148,244,0.1); color:#b794f4; border-color:#b794f4; }
+.c5 .cat-badge { background:rgba(252,129,129,0.1); color:#fc8181; border-color:#fc8181; }
+.c6 .cat-badge { background:rgba(0,212,180,0.1); color:#00d4b4; border-color:#00d4b4; }
+.c1 .section-title{color:#68d391}
+.c2 .section-title{color:#4facfe}
+.c3 .section-title{color:#f0b429}
+.c4 .section-title{color:#b794f4}
+.c5 .section-title{color:#fc8181}
+.c6 .section-title{color:#00d4b4}
+
+/* ── FOOTER ── */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 36px 24px;
+  text-align: center;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: var(--text3);
+  line-height: 2;
+}
+
+/* ── STICKY NAV ── */
+.sticky-nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  background: rgba(8,10,15,0.9);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  padding: 10px 24px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  overflow-x: auto;
+}
+.nav-logo {
+  font-family: var(--display);
+  font-size: 1.2rem;
+  color: var(--gold);
+  letter-spacing: 0.1em;
+  flex-shrink: 0;
+}
+.nav-links {
+  display: flex;
+  gap: 4px;
+  flex-wrap: nowrap;
+}
+.nav-link {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text3);
+  text-decoration: none;
+  padding: 4px 10px;
+  border-radius: 6px;
+  white-space: nowrap;
+  transition: all 0.15s;
+}
+.nav-link:hover { color: var(--gold); background: rgba(240,180,41,0.08); }
+
+/* ── BUSINESS NOTE ── */
+.biz-note {
+  background: var(--surface2);
+  border: 1px solid var(--border2);
+  border-radius: 10px;
+  padding: 14px 18px;
+  margin: 12px 0 0;
+  font-size: 0.8rem;
+  color: var(--text2);
+  line-height: 1.6;
+  display: flex;
+  gap: 10px;
+}
+.biz-icon { flex-shrink: 0; }
+</style>
+</head>
+<body>
+
+<nav class="sticky-nav">
+  <div class="nav-logo">DAX</div>
+  <div class="nav-links">
+    <a class="nav-link" href="#cat1">Basic</a>
+    <a class="nav-link" href="#cat2">Time Intelligence</a>
+    <a class="nav-link" href="#cat3">Iterators</a>
+    <a class="nav-link" href="#cat4">Ranking</a>
+    <a class="nav-link" href="#cat5">VAR/RETURN</a>
+    <a class="nav-link" href="#cat6">Advanced</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" style="padding-top:80px;">
+  <div class="hero-bg"></div>
+  <div class="grid-overlay"></div>
+  <div class="hero-content">
+    <div class="eyebrow"><span class="eyebrow-dot"></span>ANSHUL-RA1 · DATA_ANALYTICS_POWERBI</div>
+    <h1>DAX<br/><span class="gold">CHEAT</span><br/>SHEET</h1>
+    <p class="hero-sub">27 Production-Grade Measures · Interview Ready · Project 1 — Sales Analytics</p>
+    <div class="stats">
+      <div class="stat"><span class="stat-n">27</span><span class="stat-l">Measures</span></div>
+      <div class="stat"><span class="stat-n">6</span><span class="stat-l">Categories</span></div>
+      <div class="stat"><span class="stat-n">40+</span><span class="stat-l">Interview Q&As</span></div>
+      <div class="stat"><span class="stat-n">∞</span><span class="stat-l">Confidence</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- TOC -->
+<div class="toc">
+  <div class="toc-grid">
+    <a class="toc-card" href="#cat1"><span class="toc-icon">📊</span><span class="toc-num">CATEGORY 01</span><span class="toc-name">Basic Aggregations</span><span class="toc-count">9 measures</span></a>
+    <a class="toc-card" href="#cat2"><span class="toc-icon">📅</span><span class="toc-num">CATEGORY 02</span><span class="toc-name">Time Intelligence</span><span class="toc-count">9 measures</span></a>
+    <a class="toc-card" href="#cat3"><span class="toc-icon">🔁</span><span class="toc-num">CATEGORY 03</span><span class="toc-name">Iterator Functions</span><span class="toc-count">2 measures</span></a>
+    <a class="toc-card" href="#cat4"><span class="toc-icon">🏆</span><span class="toc-num">CATEGORY 04</span><span class="toc-name">Ranking</span><span class="toc-count">3 measures</span></a>
+    <a class="toc-card" href="#cat5"><span class="toc-icon">⚡</span><span class="toc-num">CATEGORY 05</span><span class="toc-name">VAR / RETURN</span><span class="toc-count">2 measures</span></a>
+    <a class="toc-card" href="#cat6"><span class="toc-icon">🚀</span><span class="toc-num">CATEGORY 06</span><span class="toc-name">Advanced</span><span class="toc-count">2 measures</span></a>
+  </div>
+</div>
+
+<hr/>
+
+<!-- ═══════════════════════ CATEGORY 1 ═══════════════════════ -->
+<section class="section c1" id="cat1">
+  <div class="section-header">
+    <span class="section-icon">📊</span>
+    <h2 class="section-title">BASIC AGGREGATIONS</h2>
+    <span class="cat-badge">CATEGORY 01 · 9 MEASURES</span>
+  </div>
+  <div class="measures-grid">
+
+    <!-- M1 -->
+    <div class="measure-card">
+      <div class="measure-top">
+        <div class="measure-info">
+          <div class="measure-num">MEASURE 01</div>
+          <div class="measure-name">Total Sales</div>
+          <div class="measure-def">Calculates the grand total of all revenue across the fact_Sales table. This is the foundation measure — almost every other measure references this one. It automatically respects whatever filter context is applied through slicers or visual interactions.</div>
+          <div class="biz-note"><span class="biz-icon">💼</span>Business use: The primary KPI on every executive dashboard. Shows total revenue for the selected period, region, or category.</div>
+        </div>
+        <div class="measure-meta">
+          <div class="meta-row"><span class="meta-label">Format</span><span class="meta-val">$ Currency</span></div>
+          <div class="meta-row"><span class="meta-label">Function</span><span class="meta-val">SUM()</span></div>
+          <div class="meta-row"><span class="meta-label">Table</span><span class="meta-val">fact_Sales</span></div>
+          <div class="meta-row"><span class="meta-label">Column</span><span class="meta-val">Sales</span></div>
+          <div class="meta-row"><span class="meta-label">Difficulty</span><span class="tag" style="background:rgba(104,211,145,0.1);color:#68d391;border-color:#68d391;">Beginner</span></div>
+        </div>
+      </div>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">DAX</span><div class="code-dots"><div class="code-dot" style="background:#fc8181"></div><div class="code-dot" style="background:#f0b429"></div><div class="code-dot" style="background:#68d391"></div></div></div>
+        <pre>Total Sales = <span class="fn">SUM</span>(fact_Sales[Sales])</pre>
+      </div>
+      <div class="qa-section">
+        <div class="qa-label">🎤 Interview Q&A</div>
+        <div class="qa-item">
+          <div class="qa-q"><span class="qa-q-icon">Q</span>Why did you use SUM() and not SUMX() for Total Sales?</div>
+          <div class="qa-a">SUM() is used when you want to aggregate a single existing column directly. It is simpler and more performant for straightforward aggregations. SUMX() is needed when you want to perform a row-by-row calculation before aggregating — for example, multiplying two columns together per row. Since Sales is already a pre-calculated revenue column in our fact table, SUM() is the correct and more efficient choice.</div>
+        </div>
+        <div class="qa-item">
+          <div class="qa-q"><span class="qa-q-icon">Q</span>How does Total Sales behave when a slicer is applied?</div>
+          <div class="qa-a">Total Sales automatically respects filter context. When a user selects Year = 2016 in a slicer, the measure evaluates only the rows where the year is 2016, returning the 2016 total. This is because DAX measures are always evaluated within the current filter context — they do not need explicit WHERE clauses like SQL.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- M2 -->
+    <div class="measure-card">
+      <div class="measure-top">
+        <div class="measure-info">
+          <div class="measure-num">MEASURE 02</div>
+          <div class="measure-name">Total Profit</div>
+          <div class="measure-def">Sums all profit values across the fact_Sales table. Profit can be negative — indicating a loss on specific orders (usually due to heavy discounting). This measure works in conjunction with Total Sales to derive the Profit Margin percentage.</div>
+          <div class="biz-note"><span class="biz-icon">💼</span>Business use: Profitability analysis. Negative values in this measure signal problematic orders or categories that need attention.</div>
+        </div>
+        <div class="measure-meta">
+          <div class="meta-row"><span class="meta-label">Format</span><span class="meta-val">$ Currency</span></div>
+          <div class="meta-row"><span class="meta-label">Function</span><span class="meta-val">SUM()</span></div>
+          <div class="meta-row"><span class="meta-label">Table</span><span class="meta-val">fact_Sales</span></div>
+          <div class="meta-row"><span class="meta-label">Column</span><span class="meta-val">Profit</span></div>
+          <div class="meta-row"><span class="meta-label">Difficulty</span><span class="tag" style="background:rgba(104,211,145,0.1);color:#68d391;border-color:#68d391;">Beginner</span></div>
+        </div>
+      </div>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">DAX</span><div class="code-dots"><div class="code-dot" style="background:#fc8181"></div><div class="code-dot" style="background:#f0b429"></div><div class="code-dot" style="background:#68d391"></div></div></div>
+        <pre>Total Profit = <span class="fn">SUM</span>(fact_Sales[Profit])</pre>
+      </div>
+      <div class="qa-section">
+        <div class="qa-label">🎤 Interview Q&A</div>
+        <div class="qa-item">
+          <div class="qa-q"><span class="qa-q-icon">Q</span>What happens when Profit contains negative values?</div>
+          <div class="qa-a">SUM() handles negative values correctly — it algebraically adds all values including negatives. A negative Total Profit means the business made a loss in the selected context. This is actually valuable information and we use it to build the Profit Category measure to flag loss-making segments.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- M3 -->
+    <div class="measure-card">
+      <div class="measure-top">
+        <div class="measure-info">
+          <div class="measure-num">MEASURE 03</div>
+          <div class="measure-name">Total Orders</div>
+          <div class="measure-def">Counts the number of UNIQUE orders. Uses DISTINCTCOUNT instead of COUNT because one Order ID can appear multiple times in the fact table — once per product line item in that order. DISTINCTCOUNT ensures each order is counted exactly once regardless of how many products it contains.</div>
+          <div class="biz-note"><span class="biz-icon">💼</span>Business use: Volume metric showing how many orders were placed. Used in Average Order Value calculation.</div>
+        </div>
+        <div class="measure-meta">
+          <div class="meta-row"><span class="meta-label">Format</span><span class="meta-val">Whole Number</span></div>
+          <div class="meta-row"><span class="meta-label">Function</span><span class="meta-val">DISTINCTCOUNT()</span></div>
+          <div class="meta-row"><span class="meta-label">Table</span><span class="meta-val">fact_Sales</span></div>
+          <div class="meta-row"><span class="meta-label">Column</span><span class="meta-val">Order ID</span></div>
+          <div class="meta-row"><span class="meta-label">Difficulty</span><span class="tag" style="background:rgba(104,211,145,0.1);color:#68d391;border-color:#68d391;">Beginner</span></div>
+        </div>
+      </div>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">DAX</span><div class="code-dots"><div class="code-dot" style="background:#fc8181"></div><div class="code-dot" style="background:#f0b429"></div><div class="code-dot" style="background:#68d391"></div></div></div>
+        <pre>Total Orders = <span class="fn">DISTINCTCOUNT</span>(fact_Sales[Order ID])</pre>
+      </div>
+      <div class="qa-section">
+        <div class="qa-label">🎤 Interview Q&A</div>
+        <div class="qa-item">
+          <div class="qa-q"><span class="qa-q-icon">Q</span>Why DISTINCTCOUNT instead of COUNT or COUNTROWS?</div>
+          <div class="qa-a">COUNT counts non-blank values in a column — it would return 9,994 (total rows) which is wrong because the same Order ID appears multiple times for multi-product orders. COUNTROWS counts all rows in a table — same problem. DISTINCTCOUNT returns the count of unique values only, giving 5,009 unique orders which is the correct business metric.</div>
+        </div>
+        <div class="qa-item">
+          <div class="qa-q"><span class="qa-q-icon">Q</span>What is the difference between COUNT, COUNTA, COUNTROWS, and DISTINCTCOUNT?</div>
+          <div class="qa-a">COUNT counts numeric non-blank values. COUNTA counts all non-blank values including text. COUNTROWS counts total rows in a table or filter result. DISTINCTCOUNT counts unique values only. For counting unique orders, customers, or products, DISTINCTCOUNT is always the correct choice.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- M4 -->
+    <div class="measure-card">
+      <div class="measure-top">
+        <div class="measure-info">
+          <div class="measure-num">MEASURE 04</div>
+          <div class="measure-name">Total Quantity</div>
+          <div class="measure-def">Sums all units sold across all orders. Unlike Total Orders which counts unique transactions, Total Quantity measures the actual volume of items sold. One order can contain multiple units of multiple products.</div>
+          <div class="biz-note"><span class="biz-icon">💼</span>Business use: Inventory and supply chain planning. Also used for weighted calculations like Average Selling Price.</div>
+        </div>
+        <div class="measure-meta">
+          <div class="meta-row"><span class="meta-label">Format</span><span class="meta-val">Whole Number</span></div>
+          <div class="meta-row"><span class="meta-label">Function</span><span class="meta-val">SUM()</span></div>
+          <div class="meta-row"><span class="meta-label">Table</span><span class="meta-val">fact_Sales</span></div>
+          <div class="meta-row"><span class="meta-label">Column</span><span class="meta-val">Quantity</span></div>
+          <div class="meta-row"><span class="meta-label">Difficulty</span><span class="tag" style="background:rgba(104,211,145,0.1);color:#68d391;border-color:#68d391;">Beginner</span></div>
+        </div>
+      </div>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">DAX</span><div class="code-dots"><div class="code-dot" style="background:#fc8181"></div><div class="code-dot" style="background:#f0b429"></div><div class="code-dot" style="background:#68d391"></div></div></div>
+        <pre>Total Quantity = <span class="fn">SUM</span>(fact_Sales[Quantity])</pre>
+      </div>
+      <div class="qa-section">
+        <div class="qa-label">🎤 Interview Q&A</div>
+        <div class="qa-item">
+          <div class="qa-q"><span class="qa-q-icon">Q</span>What is the difference between Total Orders and Total Quantity?</div>
+          <div class="qa-a">Total Orders counts unique transactions — how many separate purchases were made (5,009). Total Quantity counts total units sold across all those orders (38,000+). One order can contain 10 units of 5 different products — that is 1 order but 50 quantity. Both metrics serve different business purposes.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- M5 -->
+    <div class="measure-card">
+      <div class="measure-top">
+        <div class="measure-info">
+          <div class="measure-num">MEASURE 05</div>
+          <div class="measure-name">Profit Margin %</div>
+          <div class="measure-def">Calculates the percentage of revenue that becomes profit. Uses DIVIDE() instead of the division operator to handle zero-division gracefully. Formatted as a percentage — the underlying value is stored as a decimal (0.1247) and displayed as 12.47%.</div>
+          <div class="biz-note"><span class="biz-icon">💼</span>Business use: Profitability health indicator. Our Superstore shows ~12.47% which is medium margin — signals room for pricing or cost optimization.</div>
+        </div>
+        <div class="measure-meta">
+          <div class="meta-row"><span class="meta-label">Format</span><span class="meta-val">Percentage %</span></div>
+          <div class="meta-row"><span class="meta-label">Function</span><span class="meta-val">DIVIDE()</span></div>
+          <div class="meta-row"><span class="meta-label">References</span><span class="meta-val">[Total Profit] [Total Sales]</span></div>
+          <div class="meta-row"><span class="meta-label">Difficulty</span><span class="tag" style="background:rgba(104,211,145,0.1);color:#68d391;border-color:#68d391;">Beginner</span></div>
+        </div>
+      </div>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">DAX</span><div class="code-dots"><div class="code-dot" style="background:#fc8181"></div><div class="code-dot" style="background:#f0b429"></div><div class="code-dot" style="background:#68d391"></div></div></div>
+        <pre>Profit Margin % = <span class="fn">DIVIDE</span>([Total Profit], [Total Sales], <span class="num">0</span>)</pre>
+      </div>
+      <div class="qa-section">
+        <div class="qa-label">🎤 Interview Q&A</div>
+        <div class="qa-item">
+          <div class="qa-q"><span class="qa-q-icon">Q</span>Why use DIVIDE() instead of the / operator?</div>
+          <div class="qa-a">The division operator throws a divide-by-zero error when the denominator is zero, breaking the visual. DIVIDE() accepts a third parameter — the alternate result when the denominator is zero — returning 0 or BLANK instead of an error. This makes reports resilient to edge cases, which is essential in production environments.</div>
+        </div>
+        <div class="qa-item">
+          <div class="qa-q"><span class="qa-q-icon">Q</span>Why format as percentage in Measure Tools instead of multiplying by 100 in DAX?</div>
+          <div class="qa-a">Multiplying by 100 changes the underlying value from decimal to integer, which breaks Time Intelligence and mathematical operations on the measure. The Format property in Measure Tools only changes the display — the stored value remains 0.1247, which is mathematically correct for all downstream calculations.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- M6 -->
+    <div class="measure-card">
+      <div class="measure-top">
+        <div class="measure-info">
+          <div class="measure-num">MEASURE 06</div>
+          <div class="measure-name">Average Order Value</div>
+          <div class="measure-def">Calculates the average revenue generated per order. Divides Total Sales by Total Orders — NOT using AVERAGE() which would give average per line item, not per order. This is a critical distinction that interviewers frequently test.</div>
+          <div class="biz-note"><span class="biz-icon">💼</span>Business use: Customer spending behavior. A rising Average Order Value indicates customers are buying more per transaction — a positive business signal.</div>
+        </div>
+        <div class="measure-meta">
+          <div class="meta-row"><span class="meta-label">Format</span><span class="meta-val">$ Currency</span></div>
+          <div class="meta-row"><span class="meta-label">Function</span><span class="meta-val">DIVIDE()</span></div>
+          <div class="meta-row"><span class="meta-label">References</span><span class="meta-val">[Total Sales] [Total Orders]</span></div>
+          <div class="meta-row"><span class="meta-label">Difficulty</span><span class="tag" style="background:rgba(240,180,41,0.1);color:#f0b429;border-color:#f0b429;">Intermediate</span></div>
+        </div>
+      </div>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">DAX</span><div class="code-dots"><div class="code-dot" style="background:#fc8181"></div><div class="code-dot" style="background:#f0b429"></div><div class="code-dot" style="background:#68d391"></div></div></div>
+        <pre>Average Order Value = <span class="fn">DIVIDE</span>([Total Sales], [Total Orders], <span class="num">0</span>)</pre>
+      </div>
+      <div class="qa-section">
+        <div class="qa-label">🎤 Interview Q&A</div>
+        <div class="qa-item">
+          <div class="qa-q"><span class="qa-q-icon">Q</span>Why not use AVERAGE(fact_Sales[Sales]) for Average Order Value?</div>
+          <div class="qa-a">AVERAGE(Sales) calculates the mean of individual line item values — not the average per order. One order CA-2016-152156 may have 3 line items worth $100, $200, and $300. AVERAGE would treat these as 3 separate values. Our measure correctly sums the entire order ($600) and divides by 1 order, giving the true average value per transaction.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- M7 -->
+    <div class="measure-card">
+      <div class="measure-top">
+        <div class="measure-info">
+          <div class="measure-num">MEASURE 07</div>
+          <div class="measure-name">West Sales</div>
+          <div class="measure-def">Demonstrates CALCULATE's ability to add a filter condition that overrides the existing filter context. Always returns West region sales regardless of what the user has selected in a region slicer. Useful for fixed comparison benchmarks.</div>
+          <div class="biz-note"><span class="biz-icon">💼</span>Business use: Regional benchmarking. Compare any selected region's performance against the fixed West region baseline.</div>
+        </div>
+        <div class="measure-meta">
+          <div class="meta-row"><span class="meta-label">Format</span><span class="meta-val">$ Currency</span></div>
+          <div class="meta-row"><span class="meta-label">Function</span><span class="meta-val">CALCULATE()</span></div>
+          <div class="meta-row"><span class="meta-label">Pattern</span><span class="meta-val">Filter Override</span></div>
+          <div class="meta-row"><span class="meta-label">Difficulty</span><span class="tag" style="background:rgba(240,180,41,0.1);color:#f0b429;border-color:#f0b429;">Intermediate</span></div>
+        </div>
+      </div>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">DAX</span><div class="code-dots"><div class="code-dot" style="background:#fc8181"></div><div class="code-dot" style="background:#f0b429"></div><div class="code-dot" style="background:#68d391"></div></div></div>
+        <pre>West Sales = 
+<span class="fn">CALCULATE</span>(
+    [Total Sales],
+    dim_Region[Region] = <span class="str">"West"</span>
+)</pre>
+      </div>
+      <div class="qa-section">
+        <div class="qa-label">🎤 Interview Q&A</div>
+        <div class="qa-item">
+          <div class="qa-q"><span class="qa-q-icon">Q</span>What is CALCULATE and why is it the most important DAX function?</div>
+          <div class="qa-a">CALCULATE is the only DAX function that can modify filter context. Every other function respects the existing filter context passively. CALCULATE actively changes it — it can add new filters, remove existing filters using ALL(), or replace filters entirely. Without CALCULATE, it would be impossible to build measures like percentage of total, period comparisons, or conditional aggregations.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- M8 -->
+    <div class="measure-card">
+      <div class="measure-top">
+        <div class="measure-info">
+          <div class="measure-num">MEASURE 08</div>
+          <div class="measure-name">Sales % of Total</div>
+          <div class="measure-def">Calculates each row's contribution as a percentage of the absolute grand total. Uses ALL(fact_Sales) to remove every filter from the denominator, ensuring the grand total is always $2.3M regardless of what filters are applied to the numerator.</div>
+          <div class="biz-note"><span class="biz-icon">💼</span>Business use: Contribution analysis. Shows what percentage of total company revenue comes from each region, product, or customer.</div>
+        </div>
+        <div class="measure-meta">
+          <div class="meta-row"><span class="meta-label">Format</span><span class="meta-val">Percentage %</span></div>
+          <div class="meta-row"><span class="meta-label">Functions</span><span class="meta-val">CALCULATE() ALL() DIVIDE()</span></div>
+          <div class="meta-row"><span class="meta-label">Pattern</span><span class="meta-val">% of Total</span></div>
+          <div class="meta-row"><span class="meta-label">Difficulty</span><span class="tag" style="background:rgba(240,180,41,0.1);color:#f0b429;border-color:#f0b429;">Intermediate</span></div>
+        </div>
+      </div>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">DAX</span><div class="code-dots"><div class="code-dot" style="background:#fc8181"></div><div class="code-dot" style="background:#f0b429"></div><div class="code-dot" style="background:#68d391"></div></div></div>
+        <pre>Sales % of Total = 
+<span class="fn">DIVIDE</span>(
+    [Total Sales],
+    <span class="fn">CALCULATE</span>([Total Sales], <span class="fn">ALL</span>(fact_Sales)),
+    <span class="num">0</span>
+)</pre>
+      </div>
+      <div class="qa-section">
+        <div class="qa-label">🎤 Interview Q&A</div>
+        <div class="qa-item">
+          <div class="qa-q"><span class="qa-q-icon">Q</span>Why does this measure show 100% on a Card visual with no filters?</div>
+          <div class="qa-a">When no filters are applied, the numerator and denominator both evaluate to the same grand total — $2.3M / $2.3M = 100%. This is mathematically correct. The measure is designed for table or matrix visuals where each row has its own filter context — there it correctly shows each row's percentage contribution to the grand total.</div>
+        </div>
+        <div class="qa-item">
+          <div class="qa-q"><span class="qa-q-icon">Q</span>What does ALL() do in this context?</div>
+          <div class="qa-a">ALL() removes all filters from the specified table or column. In this measure, ALL(fact_Sales) inside CALCULATE tells Power BI to ignore every filter — year, region, category — when calculating the denominator. This ensures the denominator always represents the true grand total, making percentage calculations accurate.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- M9 -->
+    <div class="measure-card">
+      <div class="measure-top">
+        <div class="measure-info">
+          <div class="measure-num">MEASURE 09</div>
+          <div class="measure-name">Profitable Orders</div>
+          <div class="measure-def">Counts only the orders where profit is greater than zero. Uses CALCULATE with a row-level filter condition on the fact table. This demonstrates that CALCULATE can filter on numeric conditions, not just dimension values.</div>
+          <div class="biz-note"><span class="biz-icon">💼</span>Business use: Identify what proportion of orders are actually profitable. If this is significantly lower than Total Orders, the business has a discounting problem.</div>
+        </div>
+        <div class="measure-meta">
+          <div class="meta-row"><span class="meta-label">Format</span><span class="meta-val">Whole Number</span></div>
+          <div class="meta-row"><span class="meta-label">Functions</span><span class="meta-val">CALCULATE() DISTINCTCOUNT()</span></div>
+          <div class="meta-row"><span class="meta-label">Pattern</span><span class="meta-val">Conditional Count</span></div>
+          <div class="meta-row"><span class="meta-label">Difficulty</span><span class="tag" style="background:rgba(240,180,41,0.1);color:#f0b429;border-color:#f0b429;">Intermediate</span></div>
+        </div>
+      </div>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">DAX</span><div class="code-dots"><div class="code-dot" style="background:#fc8181"></div><div class="code-dot" style="background:#f0b429"></div><div class="code-dot" style="background:#68d391"></div></div></div>
+        <pre>Profitable Orders = 
+<span class="fn">CALCULATE</span>(
+    [Total Orders],
+    fact_Sales[Profit] > <span class="num">0</span>
+)</pre>
+      </div>
+      <div class="qa-section">
+        <div class="qa-label">🎤 Interview Q&A</div>
+        <div class="qa-item">
+          <div class="qa-q"><span class="qa-q-icon">Q</span>Can CALCULATE filter on numeric conditions or only on dimension values?</div>
+          <div class="qa-a">CALCULATE can filter on any valid DAX Boolean expression — not just dimension values. Numeric conditions like fact_Sales[Profit] > 0, date conditions, or complex expressions all work as filter arguments. When a non-Boolean filter is provided, Power BI internally converts it to a FILTER() expression for evaluation.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<hr/>
+
+<!-- ═══════════════════════ CATEGORY 2 ═══════════════════════ -->
+<section class="section c2" id="cat2">
+  <div class="section-header">
+    <span class="section-icon">📅</span>
+    <h2 class="section-title">TIME INTELLIGENCE</h2>
+    <span class="cat-badge">CATEGORY 02 · 9 MEASURES</span>
+  </div>
+  <div class="measures-grid">
+
+    <!-- M10 -->
+    <div class="measure-card">
+      <div class="measure-top">
+        <div class="measure-info">
+          <div class="measure-num">MEASURE 10</div>
+          <div class="measure-name">Sales MTD — Month to Date</div>
+          <div class="measure-def">Month to Date (MTD) accumulates sales from the first day of the current month up to the last date in the current filter context. Requires a properly marked Date Table to function. Resets to zero at the start of every new month.</div>
+          <div class="biz-note"><span class="biz-icon">💼</span>Business use: "How much have we sold this month so far?" Used in weekly sales meetings to track monthly progress.</div>
+        </div>
+        <div class="measure-meta">
+          <div class="meta-row"><span class="meta-label">Format</span><span class="meta-val">$ Currency</span></div>
+          <div class="meta-row"><span class="meta-label">Function</span><span class="meta-val">TOTALMTD()</span></div>
+          <div class="meta-row"><span class="meta-label">Requires</span><span class="meta-val">Marked Date Table</span></div>
+          <div class="meta-row"><span class="meta-label">Difficulty</span><span class="tag" style="background:rgba(240,180,41,0.1);color:#f0b429;border-color:#f0b429;">Intermediate</span></div>
+        </div>
+      </div>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">DAX</span><div class="code-dots"><div class="code-dot" style="background:#fc8181"></div><div class="code-dot" style="background:#f0b429"></div><div class="code-dot" style="background:#68d391"></div></div></div>
+        <pre>Sales MTD = 
+<span class="fn">TOTALMTD</span>(
+    [Total Sales],
+    dim_Date[Date]
+)</pre>
+      </div>
+      <div class="qa-section">
+        <div class="qa-label">🎤 Interview Q&A</div>
+        <div class="qa-item">
+          <div class="qa-q"><span class="qa-q-icon">Q</span>What is the difference between MTD, QTD, and YTD?</div>
+          <div class="qa-a">MTD (Month to Date) accumulates from the 1st of the current month to the current date — resetting monthly. QTD (Quarter to Date) accumulates from the 1st of the current quarter — resetting every 3 months. YTD (Year to Date) accumulates from January 1st of the current year — resetting annually. All three require a marked Date Table and are commonly used together on executive dashboards.</div>
+        </div>
+        <div class="qa-item">
+          <div class="qa-q"><span class="qa-q-icon">Q</span>Why does this measure return BLANK when no date filter is applied to current data?</div>
+          <div class="qa-a">TOTALMTD calculates for the current month in context. When no filter is applied, the current month defaults to the system date — May 2026 — which has no data in our 2014-2017 dataset. This is correct behavior. The measure works properly when a date slicer is used to select a period within the data range.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- M11 -->
+    <div class="measure-card">
+      <div class="measure-top">
+        <div class="measure-info">
+          <div class="measure-num">MEASURE 11</div>
+          <div class="measure-name">Sales QTD — Quarter to Date</div>
+          <div class="measure-def">Quarter to Date (QTD) accumulates sales from the first day of the current quarter to the last date in context. Quarters are Q1 (Jan-Mar), Q2 (Apr-Jun), Q3 (Jul-Sep), Q4 (Oct-Dec). Resets at the start of each new quarter.</div>
+          <div class="biz-note"><span class="biz-icon">💼</span>Business use: Quarterly business review tracking. Companies report earnings quarterly — QTD shows progress toward quarterly targets.</div>
+        </div>
+        <div class="measure-meta">
+          <div class="meta-row"><span class="meta-label">Format</span><span class="meta-val">$ Currency</span></div>
+          <div class="meta-row"><span class="meta-label">Function</span><span class="meta-val">TOTALQTD()</span></div>
+          <div class="meta-row"><span class="meta-label">Requires</span><span class="meta-val">Marked Date Table</span></div>
+          <div class="meta-row"><span class="meta-label">Difficulty</span><span class="tag" style="background:rgba(240,180,41,0.1);color:#f0b429;border-color:#f0b429;">Intermediate</span></div>
+        </div>
+      </div>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">DAX</span><div class="code-dots"><div class="code-dot" style="background:#fc8181"></div><div class="code-dot" style="background:#f0b429"></div><div class="code-dot" style="background:#68d391"></div></div></div>
+        <pre>Sales QTD = 
+<span class="fn">TOTALQTD</span>(
+    [Total Sales],
+    dim_Date[Date]
+)</pre>
+      </div>
+      <div class="qa-section">
+        <div class="qa-label">🎤 Interview Q&A</div>
+        <div class="qa-item">
+          <div class="qa-q"><span class="qa-q-icon">Q</span>How do you handle fiscal year quarters that don't start in January?</div>
+          <div class="qa-a">For fiscal years, TOTALQTD accepts an optional third parameter — the fiscal year end date. For example, TOTALQTD([Total Sales], dim_Date[Date], "03-31") sets the fiscal year end to March 31, making quarters April-June, July-September, October-December, January-March. Alternatively, we can add a Fiscal Quarter column in the dim_Date table using M Language.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- M12 -->
+    <div class="measure-card">
+      <div class="measure-top">
+        <div class="measure-info">
+          <div class="measure-num">MEASURE 12</div>
+          <div class="measure-name">Sales YTD — Year to Date</div>
+          <div class="measure-def">Year to Date (YTD) accumulates sales from January 1st of the current year to the last date in context. This is the most commonly used Time Intelligence measure in business reporting. Every company tracks YTD revenue against annual targets.</div>
+          <div class="biz-note"><span class="biz-icon">💼</span>Business use: Annual target tracking. "Are we on pace to hit our $3M annual revenue target?" YTD answers this question instantly.</div>
+        </div>
+        <div class="measure-meta">
+          <div class="meta-row"><span class="meta-label">Format</span><span class="meta-val">$ Currency</span></div>
+          <div class="meta-row"><span class="meta-label">Function</span><span class="meta-val">TOTALYTD()</span></div>
+          <div class="meta-row"><span class="meta-label">Requires</span><span class="meta-val">Marked Date Table</span></div>
+          <div class="meta-row"><span class="meta-label">Difficulty</span><span class="tag" style="background:rgba(240,180,41,0.1);color:#f0b429;border-color:#f0b429;">Intermediate</span></div>
+        </div>
+      </div>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">DAX</span><div class="code-dots"><div class="code-dot" style="background:#fc8181"></div><div class="code-dot" style="background:#f0b429"></div><div class="code-dot" style="background:#68d391"></div></div></div>
+        <pre>Sales YTD = 
+<span class="fn">TOTALYTD</span>(
+    [Total Sales],
+    dim_Date[Date]
+)</pre>
+      </div>
+      <div class="qa-section">
+        <div class="qa-label">🎤 Interview Q&A</div>
+        <div class="qa-item">
+          <div class="qa-q"><span class="qa-q-icon">Q</span>What is the prerequisite for Time Intelligence functions to work in Power BI?</div>
+          <div class="qa-a">Three requirements must be met: First, a Date table must exist with a continuous date column covering the full data range with no gaps. Second, this table must be marked as a Date Table in Power BI using the Mark as Date Table option. Third, the Date column in the Date table must be related to the date column in the fact table. Without all three, Time Intelligence functions will produce incorrect results or errors.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- M13 -->
+    <div class="measure-card">
+      <div class="measure-top">
+        <div class="measure-info">
+          <div class="measure-num">MEASURE 13</div>
+          <div class="measure-name">Sales PY — Previous Year</div>
+          <div class="measure-def">Previous Year (PY) returns sales for the exact same period in the previous year. Uses SAMEPERIODLASTYEAR which handles year shifting automatically including leap year edge cases. This is the foundation for Year over Year (YoY) comparison calculations.</div>
+          <div class="biz-note"><span class="biz-icon">💼</span>Business use: Year over Year benchmarking. "Did we sell more in November 2017 compared to November 2016?"</div>
+        </div>
+        <div class="measure-meta">
+          <div class="meta-row"><span class="meta-label">Format</span><span class="meta-val">$ Currency</span></div>
+          <div class="meta-row"><span class="meta-label">Function</span><span class="meta-val">SAMEPERIODLASTYEAR()</span></div>
+          <div class="meta-row"><span class="meta-label">Pattern</span><span class="meta-val">Period Shift</span></div>
+          <div class="meta-row"><span class="meta-label">Difficulty</span><span class="tag" style="background:rgba(240,180,41,0.1);color:#f0b429;border-color:#f0b429;">Intermediate</span></div>
+        </div>
+      </div>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">DAX</span><div class="code-dots"><div class="code-dot" style="background:#fc8181"></div><div class="code-dot" style="background:#f0b429"></div><div class="code-dot" style="background:#68d391"></div></div></div>
+        <pre>Sales PY = 
+<span class="fn">CALCULATE</span>(
+    [Total Sales],
+    <span class="fn">SAMEPERIODLASTYEAR</span>(dim_Date[Date])
+)</pre>
+      </div>
+      <div class="qa-section">
+        <div class="qa-label">🎤 Interview Q&A</div>
+        <div class="qa-item">
+          <div class="qa-q"><span class="qa-q-icon">Q</span>What is the difference between SAMEPERIODLASTYEAR and DATEADD with -1 YEAR?</div>
+          <div class="qa-a">SAMEPERIODLASTYEAR is purpose-built for year-over-year comparison and handles leap year edge cases automatically — for example, February 29 in a leap year maps to February 28 in a non-leap year. DATEADD(-1, YEAR) is a more general function that shifts any date by any number of periods. For annual comparisons, SAMEPERIODLASTYEAR is preferred for its clarity and automatic edge case handling.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- M14 -->
+    <div class="measure-card">
+      <div class="measure-top">
+        <div class="measure-info">
+          <div class="measure-num">MEASURE 14</div>
+          <div class="measure-name">Sales PM — Previous Month</div>
+          <div class="measure-def">Previous Month (PM) returns sales for the immediately preceding month using DATEADD with -1 MONTH offset. Foundation for Month over Month (MoM) growth calculation.</div>
+          <div class="biz-note"><span class="biz-icon">💼</span>Business use: Monthly trend analysis. "Did we improve from October to November?"</div>
+        </div>
+        <div class="measure-meta">
+          <div class="meta-row"><span class="meta-label">Format</span><span class="meta-val">$ Currency</span></div>
+          <div class="meta-row"><span class="meta-label">Function</span><span class="meta-val">DATEADD()</span></div>
+          <div class="meta-row"><span class="meta-label">Offset</span><span class="meta-val">-1 MONTH</span></div>
+          <div class="meta-row"><span class="meta-label">Difficulty</span><span class="tag" style="background:rgba(240,180,41,0.1);color:#f0b429;border-color:#f0b429;">Intermediate</span></div>
+        </div>
+      </div>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">DAX</span><div class="code-dots"><div class="code-dot" style="background:#fc8181"></div><div class="code-dot" style="background:#f0b429"></div><div class="code-dot" style="background:#68d391"></div></div></div>
+        <pre>Sales PM = 
+<span class="fn">CALCULATE</span>(
+    [Total Sales],
+    <span class="fn">DATEADD</span>(dim_Date[Date], <span class="op">-</span><span class="num">1</span>, MONTH)
+)</pre>
+      </div>
+      <div class="qa-section">
+        <div class="qa-label">🎤 Interview Q&A</div>
+        <div class="qa-item">
+          <div class="qa-q"><span class="qa-q-icon">Q</span>How flexible is DATEADD and what parameters does it accept?</div>
+          <div class="qa-a">DATEADD accepts three parameters: the date column, the number of intervals to shift (positive or negative), and the interval type. Interval types are DAY, MONTH, QUARTER, or YEAR. Examples: DATEADD(Date, -3, MONTH) gives 3 months ago, DATEADD(Date, 1, YEAR) gives next year, DATEADD(Date, -7, DAY) gives last week. This makes it highly versatile for any period comparison.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- M15 -->
+    <div class="measure-card">
+      <div class="measure-top">
+        <div class="measure-info">
+          <div class="measure-num">MEASURE 15</div>
+          <div class="measure-name">Sales PQ — Previous Quarter</div>
+          <div class="measure-def">Previous Quarter (PQ) returns sales for the immediately preceding quarter using DATEADD with -1 QUARTER offset. Used for Quarter over Quarter (QoQ) analysis.</div>
+          <div class="biz-note"><span class="biz-icon">💼</span>Business use: Quarterly trend analysis. Essential for companies with strong seasonal patterns across quarters.</div>
+        </div>
+        <div class="measure-meta">
+          <div class="meta-row"><span class="meta-label">Format</span><span class="meta-val">$ Currency</span></div>
+          <div class="meta-row"><span class="meta-label">Function</span><span class="meta-val">DATEADD()</span></div>
+          <div class="meta-row"><span class="meta-label">Offset</span><span class="meta-val">-1 QUARTER</span></div>
+          <div class="meta-row"><span class="meta-label">Difficulty</span><span class="tag" style="background:rgba(240,180,41,0.1);color:#f0b429;border-color:#f0b429;">Intermediate</span></div>
+        </div>
+      </div>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">DAX</span><div class="code-dots"><div class="code-dot" style="background:#fc8181"></div><div class="code-dot" style="background:#f0b429"></div><div class="code-dot" style="background:#68d391"></div></div></div>
+        <pre>Sales PQ = 
+<span class="fn">CALCULATE</span>(
+    [Total Sales],
+    <span class="fn">DATEADD</span>(dim_Date[Date], <span class="op">-</span><span class="num">1</span>, QUARTER)
+)</pre>
+      </div>
+      <div class="qa-section">
+        <div class="qa-label">🎤 Interview Q&A</div>
+        <div class="qa-item">
+          <div class="qa-q"><span class="qa-q-icon">Q</span>When would you use Sales PQ versus Sales PY in a report?</div>
+          <div class="qa-a">Sales PY is used for seasonal comparisons — comparing Q4 2017 to Q4 2016 accounts for seasonality patterns. Sales PQ shows sequential trend — whether Q4 2017 is better than Q3 2017. Both serve different analytical needs. A complete executive dashboard typically includes both to answer different business questions.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- M16 -->
+    <div class="measure-card">
+      <div class="measure-top">
+        <div class="measure-info">
+          <div class="measure-num">MEASURE 16</div>
+          <div class="measure-name">YoY Growth — Year over Year Growth Amount</div>
+          <div class="measure-def">Year over Year (YoY) Growth Amount is the absolute dollar difference between current period sales and the same period last year. Positive value = growth. Negative value = decline. Simple subtraction of two measures.</div>
+          <div class="biz-note"><span class="biz-icon">💼</span>Business use: "We grew by $120,000 compared to last year." The absolute amount helps executives understand the scale of growth.</div>
+        </div>
+        <div class="measure-meta">
+          <div class="meta-row"><span class="meta-label">Format</span><span class="meta-val">$ Currency</span></div>
+          <div class="meta-row"><span class="meta-label">Pattern</span><span class="meta-val">Measure Subtraction</span></div>
+          <div class="meta-row"><span class="meta-label">References</span><span class="meta-val">[Total Sales] [Sales PY]</span></div>
+          <div class="meta-row"><span class="meta-label">Difficulty</span><span class="tag" style="background:rgba(240,180,41,0.1);color:#f0b429;border-color:#f0b429;">Intermediate</span></div>
+        </div>
+      </div>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">DAX</span><div class="code-dots"><div class="code-dot" style="background:#fc8181"></div><div class="code-dot" style="background:#f0b429"></div><div class="code-dot" style="background:#68d391"></div></div></div>
+        <pre>YoY Growth = [Total Sales] <span class="op">-</span> [Sales PY]</pre>
+      </div>
+      <div class="qa-section">
+        <div class="qa-label">🎤 Interview Q&A</div>
+        <div class="qa-item">
+          <div class="qa-q"><span class="qa-q-icon">Q</span>Why build YoY Growth as a separate measure instead of calculating it inside YoY Growth %?</div>
+          <div class="qa-a">Separation of concerns is a best practice in DAX. By building YoY Growth as a standalone measure, it can be reused in multiple places — displayed on its own in a card visual, referenced inside YoY Growth %, used in conditional formatting, or referenced in the VAR/RETURN pattern. It also makes each measure simpler to read, test, and maintain independently.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- M17 -->
+    <div class="measure-card">
+      <div class="measure-top">
+        <div class="measure-info">
+          <div class="measure-num">MEASURE 17</div>
+          <div class="measure-name">YoY Growth % — Year over Year Growth Percentage</div>
+          <div class="measure-def">Year over Year (YoY) Growth Percentage shows the relative change compared to the same period last year. Divides YoY Growth by Sales PY. More meaningful than absolute growth for comparing periods of different scales.</div>
+          <div class="biz-note"><span class="biz-icon">💼</span>Business use: "We grew 20% compared to last year." The percentage is more comparable across different time periods and regions of different sizes.</div>
+        </div>
+        <div class="measure-meta">
+          <div class="meta-row"><span class="meta-label">Format</span><span class="meta-val">Percentage %</span></div>
+          <div class="meta-row"><span class="meta-label">Function</span><span class="meta-val">DIVIDE()</span></div>
+          <div class="meta-row"><span class="meta-label">References</span><span class="meta-val">[YoY Growth] [Sales PY]</span></div>
+          <div class="meta-row"><span class="meta-label">Difficulty</span><span class="tag" style="background:rgba(240,180,41,0.1);color:#f0b429;border-color:#f0b429;">Intermediate</span></div>
+        </div>
+      </div>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">DAX</span><div class="code-dots"><div class="code-dot" style="background:#fc8181"></div><div class="code-dot" style="background:#f0b429"></div><div class="code-dot" style="background:#68d391"></div></div></div>
+        <pre>YoY Growth % = 
+<span class="fn">DIVIDE</span>(
+    [YoY Growth],
+    [Sales PY],
+    <span class="num">0</span>
+)</pre>
+      </div>
+      <div class="qa-section">
+        <div class="qa-label">🎤 Interview Q&A</div>
+        <div class="qa-item">
+          <div class="qa-q"><span class="qa-q-icon">Q</span>What happens to YoY Growth % for the first year of data (2014)?</div>
+          <div class="qa-a">For 2014, Sales PY returns BLANK because there is no 2013 data in our dataset. DIVIDE handles this gracefully — when the denominator is BLANK, it returns the alternate result specified in the third parameter, which is 0. This prevents errors and keeps the visual clean. In production, this is communicated to users as "no prior year data available."</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- M18 -->
+    <div class="measure-card">
+      <div class="measure-top">
+        <div class="measure-info">
+          <div class="measure-num">MEASURE 18</div>
+          <div class="measure-name">MoM Growth % — Month over Month Growth Percentage</div>
+          <div class="measure-def">Month over Month (MoM) Growth Percentage calculates the percentage change between the current month and the previous month. Uses Sales PM (Previous Month) as the baseline. Reveals short-term momentum trends.</div>
+          <div class="biz-note"><span class="biz-icon">💼</span>Business use: Short-term performance monitoring. Sales teams track MoM to see if recent actions (campaigns, promotions) are producing results.</div>
+        </div>
+        <div class="measure-meta">
+          <div class="meta-row"><span class="meta-label">Format</span><span class="meta-val">Percentage %</span></div>
+          <div class="meta-row"><span class="meta-label">Function</span><span class="meta-val">DIVIDE()</span></div>
+          <div class="meta-row"><span class="meta-label">References</span><span class="meta-val">[Total Sales] [Sales PM]</span></div>
+          <div class="meta-row"><span class="meta-label">Difficulty</span><span class="tag" style="background:rgba(240,180,41,0.1);color:#f0b429;border-color:#f0b429;">Intermediate</span></div>
+        </div>
+      </div>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">DAX</span><div class="code-dots"><div class="code-dot" style="background:#fc8181"></div><div class="code-dot" style="background:#f0b429"></div><div class="code-dot" style="background:#68d391"></div></div></div>
+        <pre>MoM Growth % = 
+<span class="fn">DIVIDE</span>(
+    [Total Sales] <span class="op">-</span> [Sales PM],
+    [Sales PM],
+    <span class="num">0</span>
+)</pre>
+      </div>
+      <div class="qa-section">
+        <div class="qa-label">🎤 Interview Q&A</div>
+        <div class="qa-item">
+          <div class="qa-q"><span class="qa-q-icon">Q</span>When would you recommend MoM Growth % over YoY Growth % to a business stakeholder?</div>
+          <div class="qa-a">MoM Growth % is recommended for short-term operational monitoring — tracking the immediate impact of a new marketing campaign, a product launch, or a seasonal promotion. YoY Growth % is better for strategic analysis because it accounts for seasonality — comparing November 2017 to November 2016 is more meaningful than comparing November to October which may have natural seasonal differences. A complete dashboard provides both.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<hr/>
+
+<!-- ═══════════════════════ CATEGORY 3 ═══════════════════════ -->
+<section class="section c3" id="cat3">
+  <div class="section-header">
+    <span class="section-icon">🔁</span>
+    <h2 class="section-title">ITERATOR FUNCTIONS</h2>
+    <span class="cat-badge">CATEGORY 03 · 2 MEASURES</span>
+  </div>
+  <div class="measures-grid">
+
+    <!-- M19 -->
+    <div class="measure-card">
+      <div class="measure-top">
+        <div class="measure-info">
+          <div class="measure-num">MEASURE 19</div>
+          <div class="measure-name">Average Selling Price</div>
+          <div class="measure-def">Calculates the true average revenue per unit sold by using SUMX to compute total revenue row by row (Sales × Quantity), then dividing by total units. This is fundamentally different from AVERAGE(Sales) which ignores quantity weighting entirely.</div>
+          <div class="biz-note"><span class="biz-icon">💼</span>Business use: Pricing analysis. If Average Selling Price drops over time, it signals pricing pressure, heavy discounting, or a shift toward cheaper product mix.</div>
+        </div>
+        <div class="measure-meta">
+          <div class="meta-row"><span class="meta-label">Format</span><span class="meta-val">$ Currency</span></div>
+          <div class="meta-row"><span class="meta-label">Function</span><span class="meta-val">SUMX() DIVIDE()</span></div>
+          <div class="meta-row"><span class="meta-label">Pattern</span><span class="meta-val">Weighted Average</span></div>
+          <div class="meta-row"><span class="meta-label">Difficulty</span><span class="tag" style="background:rgba(252,129,129,0.1);color:#fc8181;border-color:#fc8181;">Advanced</span></div>
+        </div>
+      </div>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">DAX</span><div class="code-dots"><div class="code-dot" style="background:#fc8181"></div><div class="code-dot" style="background:#f0b429"></div><div class="code-dot" style="background:#68d391"></div></div></div>
+        <pre>Average Selling Price = 
+<span class="fn">DIVIDE</span>(
+    <span class="fn">SUMX</span>(
+        fact_Sales,
+        fact_Sales[Sales] <span class="op">*</span> fact_Sales[Quantity]
+    ),
+    <span class="fn">SUM</span>(fact_Sales[Quantity]),
+    <span class="num">0</span>
+)</pre>
+      </div>
+      <div class="qa-section">
+        <div class="qa-label">🎤 Interview Q&A</div>
+        <div class="qa-item">
+          <div class="qa-q"><span class="qa-q-icon">Q</span>Explain the difference between SUM and SUMX with a real example.</div>
+          <div class="qa-a">SUM aggregates an entire column in one operation — SUM(Sales) adds all values in the Sales column. SUMX iterates row by row, evaluates an expression per row, then sums the results. For example: if Row 1 has Sales=$100 and Quantity=3, and Row 2 has Sales=$200 and Quantity=1 — SUM(Sales) = $300, but SUMX(fact_Sales, Sales * Quantity) = ($100×3) + ($200×1) = $500 which is the actual total revenue. SUMX is essential when the calculation requires combining multiple columns per row.</div>
+        </div>
+        <div class="qa-item">
+          <div class="qa-q"><span class="qa-q-icon">Q</span>What is the naming pattern for iterator functions in DAX?</div>
+          <div class="qa-a">All iterator functions end with the letter X: SUMX, AVERAGEX, COUNTX, MAXX, MINX, RANKX, PRODUCTX. They all share the same two-parameter pattern — the table to iterate over, and the expression to evaluate per row. The X suffix is a reliable signal that the function operates row by row rather than on an entire column at once.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- M20 -->
+    <div class="measure-card">
+      <div class="measure-top">
+        <div class="measure-info">
+          <div class="measure-num">MEASURE 20</div>
+          <div class="measure-name">Avg Discount %</div>
+          <div class="measure-def">Calculates the average discount percentage applied across all orders using AVERAGEX. While AVERAGE(Discount) would give the same result here, AVERAGEX provides greater flexibility — it can be applied to a filtered subset of rows, making it extensible for conditional discount analysis.</div>
+          <div class="biz-note"><span class="biz-icon">💼</span>Business use: Discount management. High average discounts erode profit margins. Used alongside Profit Margin % to understand the discount-profit relationship.</div>
+        </div>
+        <div class="measure-meta">
+          <div class="meta-row"><span class="meta-label">Format</span><span class="meta-val">Percentage %</span></div>
+          <div class="meta-row"><span class="meta-label">Function</span><span class="meta-val">AVERAGEX()</span></div>
+          <div class="meta-row"><span class="meta-label">Pattern</span><span class="meta-val">Row Iterator</span></div>
+          <div class="meta-row"><span class="meta-label">Difficulty</span><span class="tag" style="background:rgba(240,180,41,0.1);color:#f0b429;border-color:#f0b429;">Intermediate</span></div>
+        </div>
+      </div>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">DAX</span><div class="code-dots"><div class="code-dot" style="background:#fc8181"></div><div class="code-dot" style="background:#f0b429"></div><div class="code-dot" style="background:#68d391"></div></div></div>
+        <pre>Avg Discount % = 
+<span class="fn">AVERAGEX</span>(
+    fact_Sales,
+    fact_Sales[Discount]
+)</pre>
+      </div>
+      <div class="qa-section">
+        <div class="qa-label">🎤 Interview Q&A</div>
+        <div class="qa-item">
+          <div class="qa-q"><span class="qa-q-icon">Q</span>When would AVERAGEX give a different result from AVERAGE?</div>
+          <div class="qa-a">They give the same result when applied to a raw column. AVERAGEX becomes essential when the expression involves a calculation rather than a single column — for example, AVERAGEX(fact_Sales, fact_Sales[Sales] / fact_Sales[Quantity]) calculates average price per unit row by row before averaging, which is impossible with AVERAGE alone. Also, AVERAGEX can be applied to a FILTER result — AVERAGEX(FILTER(fact_Sales, [Profit] > 0), [Discount]) gives the average discount only on profitable orders.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<hr/>
+
+<!-- ═══════════════════════ CATEGORY 4 ═══════════════════════ -->
+<section class="section c4" id="cat4">
+  <div class="section-header">
+    <span class="section-icon">🏆</span>
+    <h2 class="section-title">RANKING</h2>
+    <span class="cat-badge">CATEGORY 04 · 3 MEASURES</span>
+  </div>
+  <div class="measures-grid">
+
+    <!-- M21 -->
+    <div class="measure-card">
+      <div class="measure-top">
+        <div class="measure-info">
+          <div class="measure-num">MEASURE 21</div>
+          <div class="measure-name">Product Rank</div>
+          <div class="measure-def">Ranks each product by Total Sales using RANKX with DENSE ranking to avoid gaps when products have equal sales. ALL(dim_Product) ensures every product is considered in the ranking, not just the filtered subset visible in the current visual.</div>
+          <div class="biz-note"><span class="biz-icon">💼</span>Business use: Product performance league table. Identifies top sellers and underperformers. Changes dynamically when date or region filters are applied.</div>
+        </div>
+        <div class="measure-meta">
+          <div class="meta-row"><span class="meta-label">Format</span><span class="meta-val">Whole Number</span></div>
+          <div class="meta-row"><span class="meta-label">Function</span><span class="meta-val">RANKX() ALL()</span></div>
+          <div class="meta-row"><span class="meta-label">Order</span><span class="meta-val">DESC (High = Rank 1)</span></div>
+          <div class="meta-row"><span class="meta-label">Difficulty</span><span class="tag" style="background:rgba(252,129,129,0.1);color:#fc8181;border-color:#fc8181;">Advanced</span></div>
+        </div>
+      </div>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">DAX</span><div class="code-dots"><div class="code-dot" style="background:#fc8181"></div><div class="code-dot" style="background:#f0b429"></div><div class="code-dot" style="background:#68d391"></div></div></div>
+        <pre>Product Rank = 
+<span class="fn">RANKX</span>(
+    <span class="fn">ALL</span>(dim_Product),
+    [Total Sales],
+    ,
+    DESC,
+    DENSE
+)</pre>
+      </div>
+      <div class="qa-section">
+        <div class="qa-label">🎤 Interview Q&A</div>
+        <div class="qa-item">
+          <div class="qa-q"><span class="qa-q-icon">Q</span>Explain all 5 parameters of RANKX.</div>
+          <div class="qa-a">Parameter 1 is the table to rank across — ALL(dim_Product) removes filters so all products are ranked. Parameter 2 is the value expression to rank by — [Total Sales]. Parameter 3 is the value expression for the current row — left blank to use the default current context value. Parameter 4 is the order: DESC means highest sales gets Rank 1, ASC means lowest gets Rank 1. Parameter 5 is the tie-breaking method: DENSE means tied values share a rank with no gap (1,1,2,3), SKIP means tied values share a rank but leave a gap (1,1,3,4).</div>
+        </div>
+        <div class="qa-item">
+          <div class="qa-q"><span class="qa-q-icon">Q</span>Why is ALL(dim_Product) necessary in RANKX?</div>
+          <div class="qa-a">Without ALL(), RANKX would only consider the products currently visible in the filter context. If a visual is filtered to show only Furniture products, every Furniture product would rank against each other — the top Furniture product would be Rank 1. With ALL(dim_Product), every product in the entire dataset is considered, so Rank 1 is truly the best-selling product across all categories.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- M22 -->
+    <div class="measure-card">
+      <div class="measure-top">
+        <div class="measure-info">
+          <div class="measure-num">MEASURE 22</div>
+          <div class="measure-name">Customer Rank</div>
+          <div class="measure-def">Ranks each customer by Total Sales using the same RANKX pattern as Product Rank but applied to dim_Customer. Identifies the most valuable customers by revenue contribution.</div>
+          <div class="biz-note"><span class="biz-icon">💼</span>Business use: Customer value ranking. Supports VIP customer identification, loyalty program targeting, and account management prioritization.</div>
+        </div>
+        <div class="measure-meta">
+          <div class="meta-row"><span class="meta-label">Format</span><span class="meta-val">Whole Number</span></div>
+          <div class="meta-row"><span class="meta-label">Function</span><span class="meta-val">RANKX() ALL()</span></div>
+          <div class="meta-row"><span class="meta-label">Table</span><span class="meta-val">dim_Customer</span></div>
+          <div class="meta-row"><span class="meta-label">Difficulty</span><span class="tag" style="background:rgba(252,129,129,0.1);color:#fc8181;border-color:#fc8181;">Advanced</span></div>
+        </div>
+      </div>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">DAX</span><div class="code-dots"><div class="code-dot" style="background:#fc8181"></div><div class="code-dot" style="background:#f0b429"></div><div class="code-dot" style="background:#68d391"></div></div></div>
+        <pre>Customer Rank = 
+<span class="fn">RANKX</span>(
+    <span class="fn">ALL</span>(dim_Customer),
+    [Total Sales],
+    ,
+    DESC,
+    DENSE
+)</pre>
+      </div>
+      <div class="qa-section">
+        <div class="qa-label">🎤 Interview Q&A</div>
+        <div class="qa-item">
+          <div class="qa-q"><span class="qa-q-icon">Q</span>How would you modify this to rank by profit instead of sales?</div>
+          <div class="qa-a">Simply replace [Total Sales] with [Total Profit] in the second parameter: RANKX(ALL(dim_Customer), [Total Profit], , DESC, DENSE). This ranks customers by their profitability contribution instead of revenue — which is often more valuable for business decisions since a high-revenue customer with heavy discounts may actually be less profitable than a smaller customer.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- M23 -->
+    <div class="measure-card">
+      <div class="measure-top">
+        <div class="measure-info">
+          <div class="measure-num">MEASURE 23</div>
+          <div class="measure-name">Is Top 10 Product</div>
+          <div class="measure-def">Uses the Product Rank measure to classify each product as either "Top 10" or "Others". Creates a text flag that can be used for filtering visuals, conditional formatting, or color coding. Demonstrates composing measures on top of other measures.</div>
+          <div class="biz-note"><span class="biz-icon">💼</span>Business use: Dynamic Top 10 filtering. The Top 10 updates automatically when any filter changes — no hardcoded product names required.</div>
+        </div>
+        <div class="measure-meta">
+          <div class="meta-row"><span class="meta-label">Format</span><span class="meta-val">Text</span></div>
+          <div class="meta-row"><span class="meta-label">Function</span><span class="meta-val">IF()</span></div>
+          <div class="meta-row"><span class="meta-label">References</span><span class="meta-val">[Product Rank]</span></div>
+          <div class="meta-row"><span class="meta-label">Difficulty</span><span class="tag" style="background:rgba(240,180,41,0.1);color:#f0b429;border-color:#f0b429;">Intermediate</span></div>
+        </div>
+      </div>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">DAX</span><div class="code-dots"><div class="code-dot" style="background:#fc8181"></div><div class="code-dot" style="background:#f0b429"></div><div class="code-dot" style="background:#68d391"></div></div></div>
+        <pre>Is Top 10 Product = 
+<span class="fn">IF</span>(
+    [Product Rank] <= <span class="num">10</span>,
+    <span class="str">"Top 10"</span>,
+    <span class="str">"Others"</span>
+)</pre>
+      </div>
+      <div class="qa-section">
+        <div class="qa-label">🎤 Interview Q&A</div>
+        <div class="qa-item">
+          <div class="qa-q"><span class="qa-q-icon">Q</span>How is this measure used in a real report?</div>
+          <div class="qa-a">This measure is used in three ways: First, as a visual filter — add it to the Filters pane and set it to "Top 10" to show only top-performing products. Second, for conditional formatting — color Top 10 rows green and Others grey in a matrix. Third, for grouping analysis — use it as a legend in a chart to show Top 10 vs Others contribution to total sales. The key advantage is that the classification updates dynamically when any slicer changes.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<hr/>
+
+<!-- ═══════════════════════ CATEGORY 5 ═══════════════════════ -->
+<section class="section c5" id="cat5">
+  <div class="section-header">
+    <span class="section-icon">⚡</span>
+    <h2 class="section-title">VAR / RETURN PATTERN</h2>
+    <span class="cat-badge">CATEGORY 05 · 2 MEASURES</span>
+  </div>
+  <div class="measures-grid">
+
+    <!-- M24 -->
+    <div class="measure-card">
+      <div class="measure-top">
+        <div class="measure-info">
+          <div class="measure-num">MEASURE 24</div>
+          <div class="measure-name">Sales Performance Status</div>
+          <div class="measure-def">Uses VAR/RETURN to store intermediate calculations in named variables, then SWITCH(TRUE()) to categorize performance into four tiers based on Year over Year (YoY) Growth percentage. Demonstrates production-quality DAX code writing practices.</div>
+          <div class="biz-note"><span class="biz-icon">💼</span>Business use: At-a-glance performance indicator. Executives see colored status labels instead of raw numbers — enabling faster decisions.</div>
+        </div>
+        <div class="measure-meta">
+          <div class="meta-row"><span class="meta-label">Format</span><span class="meta-val">Text</span></div>
+          <div class="meta-row"><span class="meta-label">Functions</span><span class="meta-val">VAR RETURN SWITCH DIVIDE</span></div>
+          <div class="meta-row"><span class="meta-label">Pattern</span><span class="meta-val">VAR/RETURN + SWITCH</span></div>
+          <div class="meta-row"><span class="meta-label">Difficulty</span><span class="tag" style="background:rgba(252,129,129,0.1);color:#fc8181;border-color:#fc8181;">Advanced</span></div>
+        </div>
+      </div>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">DAX</span><div class="code-dots"><div class="code-dot" style="background:#fc8181"></div><div class="code-dot" style="background:#f0b429"></div><div class="code-dot" style="background:#68d391"></div></div></div>
+        <pre><span class="kw">VAR</span> <span class="var">_CurrentSales</span>  = [Total Sales]
+<span class="kw">VAR</span> <span class="var">_PreviousSales</span> = [Sales PY]
+<span class="kw">VAR</span> <span class="var">_GrowthPct</span> = 
+    <span class="fn">DIVIDE</span>(
+        <span class="var">_CurrentSales</span> <span class="op">-</span> <span class="var">_PreviousSales</span>,
+        <span class="var">_PreviousSales</span>,
+        <span class="num">0</span>
+    )
+<span class="kw">RETURN</span>
+    <span class="fn">SWITCH</span>(
+        TRUE(),
+        <span class="var">_GrowthPct</span> >= <span class="num">0.1</span>,   <span class="str">"🟢 Excellent (>10%)"</span>,
+        <span class="var">_GrowthPct</span> >= <span class="num">0</span>,     <span class="str">"✅ Growing"</span>,
+        <span class="var">_GrowthPct</span> >= <span class="op">-</span><span class="num">0.1</span>,  <span class="str">"⚠️ Declining"</span>,
+                               <span class="str">"🔴 Critical (>10% drop)"</span>
+    )</pre>
+      </div>
+      <div class="qa-section">
+        <div class="qa-label">🎤 Interview Q&A</div>
+        <div class="qa-item">
+          <div class="qa-q"><span class="qa-q-icon">Q</span>What are the advantages of using VAR/RETURN over writing the full expression inline?</div>
+          <div class="qa-a">Three key advantages: First, performance — variables are calculated only once regardless of how many times they are referenced in the RETURN block. Without VAR, [Sales PY] would be calculated twice — once in the numerator subtraction and once in the denominator division. Second, readability — named variables make the intent of each calculation self-documenting. Third, debuggability — you can temporarily change RETURN to return an intermediate variable (RETURN _GrowthPct) to inspect values during development.</div>
+        </div>
+        <div class="qa-item">
+          <div class="qa-q"><span class="qa-q-icon">Q</span>How does SWITCH(TRUE()) work and why is it better than nested IF statements?</div>
+          <div class="qa-a">SWITCH(TRUE()) evaluates each condition in order and returns the result of the first condition that evaluates to TRUE. It stops checking once a match is found. Compared to nested IF statements, SWITCH(TRUE()) is more readable, easier to maintain, and more performant for multiple conditions. Adding a new tier requires one line instead of restructuring the entire nested IF chain.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- M25 -->
+    <div class="measure-card">
+      <div class="measure-top">
+        <div class="measure-info">
+          <div class="measure-num">MEASURE 25</div>
+          <div class="measure-name">Profit Category</div>
+          <div class="measure-def">Classifies the current context into one of four profit margin categories using VAR to store the Profit Margin % and SWITCH(TRUE()) for clean multi-condition logic. Demonstrates the same pattern applied to profitability instead of growth.</div>
+          <div class="biz-note"><span class="biz-icon">💼</span>Business use: Margin health flagging. Quickly identify which products, regions, or customer segments are loss-making versus high-margin.</div>
+        </div>
+        <div class="measure-meta">
+          <div class="meta-row"><span class="meta-label">Format</span><span class="meta-val">Text</span></div>
+          <div class="meta-row"><span class="meta-label">Functions</span><span class="meta-val">VAR RETURN SWITCH</span></div>
+          <div class="meta-row"><span class="meta-label">References</span><span class="meta-val">[Profit Margin %]</span></div>
+          <div class="meta-row"><span class="meta-label">Difficulty</span><span class="tag" style="background:rgba(252,129,129,0.1);color:#fc8181;border-color:#fc8181;">Advanced</span></div>
+        </div>
+      </div>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">DAX</span><div class="code-dots"><div class="code-dot" style="background:#fc8181"></div><div class="code-dot" style="background:#f0b429"></div><div class="code-dot" style="background:#68d391"></div></div></div>
+        <pre><span class="kw">VAR</span> <span class="var">_Margin</span> = [Profit Margin %]
+<span class="kw">RETURN</span>
+    <span class="fn">SWITCH</span>(
+        TRUE(),
+        <span class="var">_Margin</span> >= <span class="num">0.2</span>,  <span class="str">"High Margin (>20%)"</span>,
+        <span class="var">_Margin</span> >= <span class="num">0.1</span>,  <span class="str">"Medium Margin (10-20%)"</span>,
+        <span class="var">_Margin</span> >= <span class="num">0</span>,    <span class="str">"Low Margin (<10%)"</span>,
+                          <span class="str">"Loss Making"</span>
+    )</pre>
+      </div>
+      <div class="qa-section">
+        <div class="qa-label">🎤 Interview Q&A</div>
+        <div class="qa-item">
+          <div class="qa-q"><span class="qa-q-icon">Q</span>Can VAR store a measure reference and if so why is that useful?</div>
+          <div class="qa-a">Yes — VAR can store the result of any DAX expression including measure references. VAR _Margin = [Profit Margin %] evaluates the measure once and stores the decimal result. This is particularly useful when the same measure is referenced multiple times in different conditions — the measure calculates once and the stored value is reused, which is significantly more performant than recalculating it for each condition check.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<hr/>
+
+<!-- ═══════════════════════ CATEGORY 6 ═══════════════════════ -->
+<section class="section c6" id="cat6">
+  <div class="section-header">
+    <span class="section-icon">🚀</span>
+    <h2 class="section-title">ADVANCED MEASURES</h2>
+    <span class="cat-badge">CATEGORY 06 · 2 MEASURES</span>
+  </div>
+  <div class="measures-grid">
+
+    <!-- M26 -->
+    <div class="measure-card">
+      <div class="measure-top">
+        <div class="measure-info">
+          <div class="measure-num">MEASURE 26</div>
+          <div class="measure-name">Running Total Sales</div>
+          <div class="measure-def">Calculates a cumulative sum of sales that keeps growing over time. Uses CALCULATE with a FILTER on ALL(dim_Date) to include all dates up to and including the current date in context. Unlike YTD (Year to Date) which resets yearly, Running Total never resets — it accumulates from the very beginning of the data.</div>
+          <div class="biz-note"><span class="biz-icon">💼</span>Business use: Cumulative growth visualization. Used in waterfall charts and area charts to show the total business built over time. Revenue milestones are tracked with this measure.</div>
+        </div>
+        <div class="measure-meta">
+          <div class="meta-row"><span class="meta-label">Format</span><span class="meta-val">$ Currency</span></div>
+          <div class="meta-row"><span class="meta-label">Functions</span><span class="meta-val">CALCULATE FILTER ALL MAX</span></div>
+          <div class="meta-row"><span class="meta-label">Pattern</span><span class="meta-val">Cumulative Calculation</span></div>
+          <div class="meta-row"><span class="meta-label">Difficulty</span><span class="tag" style="background:rgba(252,129,129,0.1);color:#fc8181;border-color:#fc8181;">Advanced</span></div>
+        </div>
+      </div>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">DAX</span><div class="code-dots"><div class="code-dot" style="background:#fc8181"></div><div class="code-dot" style="background:#f0b429"></div><div class="code-dot" style="background:#68d391"></div></div></div>
+        <pre>Running Total Sales = 
+<span class="fn">CALCULATE</span>(
+    [Total Sales],
+    <span class="fn">FILTER</span>(
+        <span class="fn">ALL</span>(dim_Date),
+        dim_Date[Date] <= <span class="fn">MAX</span>(dim_Date[Date])
+    )
+)</pre>
+      </div>
+      <div class="qa-section">
+        <div class="qa-label">🎤 Interview Q&A</div>
+        <div class="qa-item">
+          <div class="qa-q"><span class="qa-q-icon">Q</span>Explain how the Running Total logic works step by step.</div>
+          <div class="qa-a">Step 1: ALL(dim_Date) removes all existing date filters, making every date available for evaluation. Step 2: FILTER then applies a new condition — keep only dates where dim_Date[Date] is less than or equal to MAX(dim_Date[Date]). Step 3: MAX(dim_Date[Date]) returns the last date in the current row's context — for example, if the visual shows February 2016, MAX returns February 29, 2016. Step 4: The filter keeps all dates from the beginning of the dataset up to February 29, 2016. Step 5: CALCULATE evaluates [Total Sales] in this filtered context — returning cumulative sales from day 1 through February 2016.</div>
+        </div>
+        <div class="qa-item">
+          <div class="qa-q"><span class="qa-q-icon">Q</span>What is the difference between Running Total and YTD (Year to Date)?</div>
+          <div class="qa-a">YTD resets to zero at the start of every year — on January 1, 2016 it starts counting again from zero. Running Total never resets — it accumulates from the very first date in the dataset continuously. YTD is useful for tracking annual targets. Running Total is useful for showing absolute business growth over the entire history of the company.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- M27 -->
+    <div class="measure-card">
+      <div class="measure-top">
+        <div class="measure-info">
+          <div class="measure-num">MEASURE 27</div>
+          <div class="measure-name">Dynamic Title</div>
+          <div class="measure-def">Creates a context-aware text string that changes based on what the user has selected in the Year slicer. Uses SELECTEDVALUE which returns the selected value when exactly one item is chosen, and falls back to a default text when no selection or multiple selections exist. The & operator concatenates text strings.</div>
+          <div class="biz-note"><span class="biz-icon">💼</span>Business use: Professional report UX. When a user selects 2016, the report title automatically reads "Sales Analysis — 2016" making the report feel interactive and eliminating confusion about which period is being viewed.</div>
+        </div>
+        <div class="measure-meta">
+          <div class="meta-row"><span class="meta-label">Format</span><span class="meta-val">Text</span></div>
+          <div class="meta-row"><span class="meta-label">Function</span><span class="meta-val">SELECTEDVALUE() &amp;</span></div>
+          <div class="meta-row"><span class="meta-label">Pattern</span><span class="meta-val">Dynamic UX</span></div>
+          <div class="meta-row"><span class="meta-label">Difficulty</span><span class="tag" style="background:rgba(240,180,41,0.1);color:#f0b429;border-color:#f0b429;">Intermediate</span></div>
+        </div>
+      </div>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">DAX</span><div class="code-dots"><div class="code-dot" style="background:#fc8181"></div><div class="code-dot" style="background:#f0b429"></div><div class="code-dot" style="background:#68d391"></div></div></div>
+        <pre>Dynamic Title = 
+<span class="str">"Sales Analysis — "</span> <span class="op">&amp;</span> 
+<span class="fn">SELECTEDVALUE</span>(
+    dim_Date[Year],
+    <span class="str">"All Years"</span>
+)</pre>
+      </div>
+      <div class="qa-section">
+        <div class="qa-label">🎤 Interview Q&A</div>
+        <div class="qa-item">
+          <div class="qa-q"><span class="qa-q-icon">Q</span>How does SELECTEDVALUE work and what is the second parameter for?</div>
+          <div class="qa-a">SELECTEDVALUE returns the value of a column when exactly one distinct value is in the filter context. The second parameter is the alternate result — returned when zero values or more than one value is selected. Without the second parameter, SELECTEDVALUE returns BLANK when no single item is selected, which would produce "Sales Analysis — " with nothing after the dash. The alternate result "All Years" makes the title informative in all scenarios.</div>
+        </div>
+        <div class="qa-item">
+          <div class="qa-q"><span class="qa-q-icon">Q</span>How is this measure used in a visual?</div>
+          <div class="qa-a">The Dynamic Title measure is used in the Title property of a visual's formatting options. In the visual's Format pane, go to Title, enable it, then in the Title text field click the fx (conditional formatting) button and select the Dynamic Title measure as the value. The visual title will now automatically update whenever the year slicer selection changes — without any manual intervention.</div>
+        </div>
+        <div class="qa-item">
+          <div class="qa-q"><span class="qa-q-icon">Q</span>How would you extend this to show both the selected year and region?</div>
+          <div class="qa-a">Extend the concatenation: "Sales Analysis — " & SELECTEDVALUE(dim_Date[Year], "All Years") & " | " & SELECTEDVALUE(dim_Region[Region], "All Regions"). This produces titles like "Sales Analysis — 2016 | West" when both slicers have single selections, and gracefully falls back to "All Years" or "All Regions" when multiple items are selected.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<hr/>
+
+<!-- FOOTER -->
+<footer>
+  <div>ANSHUL-RA1 · DATA_ANALYTICS_POWERBI · Project 1 — Sales Analytics Dashboard</div>
+  <div>27 DAX Measures · 6 Categories · Interview Ready · Production Grade</div>
+  <div style="margin-top:8px;color:#4a5568;">
+    Basic Aggregations · Time Intelligence (MTD/QTD/YTD/YoY/MoM) · Iterator Functions · Ranking · VAR/RETURN · Advanced
+  </div>
+</footer>
+
+</body>
+</html>
