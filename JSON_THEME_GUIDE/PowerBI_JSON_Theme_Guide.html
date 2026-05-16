@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Power BI JSON Theme Guide | Anshul-RA1</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --bg: #0c0e14;
+  --bg2: #111318;
+  --surface: #181c27;
+  --surface2: #1e2335;
+  --border: #242b3d;
+  --border2: #2d3755;
+  --gold: #f0b429;
+  --blue: #4facfe;
+  --teal: #00d4b4;
+  --green: #68d391;
+  --red: #fc8181;
+  --purple: #b794f4;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --font: 'Outfit', sans-serif;
+  --mono: 'JetBrains Mono', monospace;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.6;overflow-x:hidden;}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(12,14,20,0.95);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:12px 32px;display:flex;align-items:center;gap:24px;}
+.nav-brand{font-size:1rem;font-weight:700;color:var(--gold);letter-spacing:0.05em;white-space:nowrap;}
+.nav-links{display:flex;gap:4px;overflow-x:auto;}
+.nav-link{font-size:0.7rem;font-family:var(--mono);letter-spacing:0.08em;text-transform:uppercase;color:var(--text3);text-decoration:none;padding:4px 10px;border-radius:6px;white-space:nowrap;transition:all 0.15s;}
+.nav-link:hover{color:var(--gold);background:rgba(240,180,41,0.08);}
+
+/* HERO */
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:100px 24px 60px;position:relative;overflow:hidden;}
+.hero-rings{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;}
+.ring{position:absolute;border-radius:50%;border:1px solid;animation:rotate 20s linear infinite;}
+.ring1{width:600px;height:600px;border-color:rgba(79,172,254,0.08);animation-duration:25s;}
+.ring2{width:400px;height:400px;border-color:rgba(240,180,41,0.06);animation-duration:18s;animation-direction:reverse;}
+.ring3{width:800px;height:800px;border-color:rgba(0,212,180,0.04);animation-duration:35s;}
+@keyframes rotate{to{transform:rotate(360deg);}}
+.hero-content{position:relative;z-index:1;max-width:800px;}
+.tag{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:0.68rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);background:rgba(240,180,41,0.08);border:1px solid rgba(240,180,41,0.2);padding:6px 16px;border-radius:100px;margin-bottom:28px;}
+.dot{width:5px;height:5px;background:var(--gold);border-radius:50%;animation:pulse 1.5s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.3;transform:scale(0.8);}}
+.hero h1{font-size:clamp(2.5rem,7vw,6rem);font-weight:800;line-height:1;letter-spacing:-0.03em;margin-bottom:20px;}
+.hero h1 .g{color:var(--gold);}
+.hero h1 .b{color:var(--blue);}
+.hero-desc{font-size:1rem;color:var(--text2);margin-bottom:40px;max-width:500px;margin-left:auto;margin-right:auto;}
+.hero-stats{display:flex;gap:0;background:var(--surface);border:1px solid var(--border);border-radius:16px;overflow:hidden;}
+.hstat{flex:1;padding:18px 20px;text-align:center;border-right:1px solid var(--border);}
+.hstat:last-child{border-right:none;}
+.hstat-n{font-size:2rem;font-weight:800;color:var(--gold);display:block;line-height:1;}
+.hstat-l{font-size:0.68rem;color:var(--text3);font-family:var(--mono);letter-spacing:0.1em;text-transform:uppercase;}
+
+/* LAYOUT */
+.wrap{max-width:1000px;margin:0 auto;padding:60px 24px;}
+.section-tag{font-family:var(--mono);font-size:0.65rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;}
+.section-title{font-size:clamp(1.8rem,3vw,2.5rem);font-weight:800;letter-spacing:-0.02em;margin-bottom:8px;}
+.section-desc{color:var(--text2);font-size:0.92rem;margin-bottom:36px;max-width:600px;}
+hr.sep{border:none;border-top:1px solid var(--border);margin:56px 0;}
+
+/* CARDS */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:16px;overflow:hidden;margin-bottom:20px;transition:border-color 0.2s;}
+.card:hover{border-color:var(--border2);}
+.card-head{padding:18px 22px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;}
+.card-icon{font-size:1.4rem;}
+.card-title{font-size:1rem;font-weight:700;}
+.card-subtitle{font-size:0.75rem;color:var(--text2);font-family:var(--mono);}
+.card-body{padding:20px 22px;}
+
+/* CODE */
+.code-wrap{background:var(--bg2);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin:12px 0;}
+.code-bar{display:flex;align-items:center;justify-content:space-between;padding:8px 14px;border-bottom:1px solid var(--border);}
+.code-bar-lang{font-family:var(--mono);font-size:0.62rem;color:var(--text3);letter-spacing:0.1em;text-transform:uppercase;}
+.dots{display:flex;gap:5px;}
+.dot2{width:8px;height:8px;border-radius:50%;}
+pre{padding:18px 20px;font-family:var(--mono);font-size:0.76rem;line-height:1.8;color:var(--text2);overflow-x:auto;white-space:pre;}
+.ck{color:var(--gold);}
+.cs{color:var(--green);}
+.cn{color:var(--blue);}
+.cm{color:var(--text3);font-style:italic;}
+.ct{color:var(--teal);}
+.cp{color:var(--purple);}
+
+/* COMPARE */
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0;}
+.compare-box{border-radius:12px;padding:18px;border:1px solid;}
+.compare-box.bad{background:rgba(252,129,129,0.05);border-color:rgba(252,129,129,0.2);}
+.compare-box.good{background:rgba(104,211,145,0.05);border-color:rgba(104,211,145,0.2);}
+.compare-label{font-size:0.7rem;font-family:var(--mono);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:6px;}
+.compare-label.red{color:var(--red);}
+.compare-label.green{color:var(--green);}
+.compare-item{font-size:0.82rem;color:var(--text2);margin-bottom:8px;display:flex;align-items:flex-start;gap:8px;line-height:1.5;}
+.compare-item::before{flex-shrink:0;margin-top:2px;}
+.bad .compare-item::before{content:'❌';}
+.good .compare-item::before{content:'✅';}
+
+/* TABLE */
+.tbl{width:100%;border-collapse:collapse;font-size:0.82rem;margin:12px 0;}
+.tbl th{background:var(--surface2);border:1px solid var(--border);padding:10px 14px;text-align:left;font-weight:600;color:var(--text);font-size:0.75rem;letter-spacing:0.03em;}
+.tbl td{border:1px solid var(--border);padding:10px 14px;color:var(--text2);vertical-align:top;}
+.tbl tr:hover td{background:var(--surface2);}
+.tbl td:first-child{font-family:var(--mono);color:var(--blue);font-size:0.75rem;}
+.tbl td code{font-family:var(--mono);font-size:0.72rem;background:var(--bg2);padding:2px 6px;border-radius:4px;color:var(--green);}
+
+/* COLOR SWATCH */
+.swatches{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;margin:16px 0;}
+.swatch{border-radius:10px;overflow:hidden;border:1px solid var(--border);}
+.swatch-color{height:52px;}
+.swatch-info{padding:10px 12px;background:var(--surface);}
+.swatch-name{font-size:0.78rem;font-weight:600;color:var(--text);margin-bottom:2px;}
+.swatch-hex{font-family:var(--mono);font-size:0.68rem;color:var(--text3);}
+.swatch-use{font-size:0.7rem;color:var(--text2);margin-top:4px;}
+
+/* QA */
+.qa-list{display:flex;flex-direction:column;gap:16px;}
+.qa-item{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;}
+.qa-q{padding:16px 18px;display:flex;gap:10px;align-items:flex-start;cursor:pointer;border-bottom:1px solid transparent;transition:border-color 0.2s;}
+.qa-q:hover{border-bottom-color:var(--border);}
+.qa-q-icon{color:var(--gold);font-family:var(--mono);font-size:0.75rem;flex-shrink:0;margin-top:2px;}
+.qa-q-text{font-size:0.88rem;font-weight:600;color:var(--text);}
+.qa-a{padding:16px 18px;background:rgba(240,180,41,0.03);border-top:1px solid var(--border);font-size:0.82rem;color:var(--text2);line-height:1.7;}
+
+/* INFO BOX */
+.info{border-radius:10px;padding:14px 16px;margin:14px 0;font-size:0.82rem;line-height:1.6;display:flex;gap:10px;align-items:flex-start;}
+.info.gold{background:rgba(240,180,41,0.06);border:1px solid rgba(240,180,41,0.18);color:var(--text2);}
+.info.blue{background:rgba(79,172,254,0.06);border:1px solid rgba(79,172,254,0.18);color:var(--text2);}
+.info.green{background:rgba(104,211,145,0.06);border:1px solid rgba(104,211,145,0.18);color:var(--text2);}
+.info-icon{flex-shrink:0;font-size:1rem;}
+
+/* VISUAL DIAGRAM */
+.visual-diagram{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:20px;font-family:var(--mono);font-size:0.74rem;line-height:1.9;color:var(--text2);overflow-x:auto;white-space:pre;}
+
+/* STEPS */
+.steps-list{display:flex;flex-direction:column;gap:0;}
+.step{display:flex;gap:16px;align-items:stretch;}
+.step-left{display:flex;flex-direction:column;align-items:center;width:36px;flex-shrink:0;}
+.step-num{width:36px;height:36px;border-radius:50%;background:rgba(240,180,41,0.12);border:1px solid rgba(240,180,41,0.3);color:var(--gold);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.82rem;flex-shrink:0;}
+.step-line{width:2px;flex:1;background:var(--border);margin:4px 0;}
+.step-right{flex:1;padding-bottom:20px;}
+.step-title{font-size:0.92rem;font-weight:700;margin-bottom:4px;}
+.step-desc{font-size:0.82rem;color:var(--text2);line-height:1.5;}
+
+/* MISTAKES */
+.mistakes{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;}
+.mistake{background:rgba(252,129,129,0.05);border:1px solid rgba(252,129,129,0.15);border-radius:12px;padding:16px;}
+.mistake-title{font-size:0.82rem;font-weight:700;color:var(--red);margin-bottom:8px;display:flex;align-items:center;gap:6px;}
+.mistake-fix{font-size:0.78rem;color:var(--text2);line-height:1.5;}
+.mistake-fix strong{color:var(--green);}
+
+/* FOOTER */
+footer{border-top:1px solid var(--border);padding:32px;text-align:center;font-family:var(--mono);font-size:0.7rem;color:var(--text3);line-height:2;}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-brand">JSON THEME</div>
+  <div class="nav-links">
+    <a class="nav-link" href="#what">What is it</a>
+    <a class="nav-link" href="#why">Why use it</a>
+    <a class="nav-link" href="#structure">Structure</a>
+    <a class="nav-link" href="#params">Parameters</a>
+    <a class="nav-link" href="#colors">Colors</a>
+    <a class="nav-link" href="#visuals">Visual Types</a>
+    <a class="nav-link" href="#apply">How to Apply</a>
+    <a class="nav-link" href="#project">Our Theme</a>
+    <a class="nav-link" href="#interview">Interview</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-rings">
+    <div class="ring ring1"></div>
+    <div class="ring ring2"></div>
+    <div class="ring ring3"></div>
+  </div>
+  <div class="hero-content">
+    <div class="tag"><span class="dot"></span>ANSHUL-RA1 · POWER BI DESIGN SYSTEM</div>
+    <h1><span class="g">JSON</span><br/><span class="b">THEME</span><br/>GUIDE</h1>
+    <p class="hero-desc">Master Power BI JSON themes — from structure to production. Build once, format everything.</p>
+    <div class="hero-stats">
+      <div class="hstat"><span class="hstat-n">1</span><span class="hstat-l">File</span></div>
+      <div class="hstat"><span class="hstat-n">∞</span><span class="hstat-l">Visuals Formatted</span></div>
+      <div class="hstat"><span class="hstat-n">0</span><span class="hstat-l">Manual Steps</span></div>
+      <div class="hstat"><span class="hstat-n">100%</span><span class="hstat-l">Consistency</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT IS IT -->
+<div class="wrap" id="what">
+  <div class="section-tag">SECTION 01</div>
+  <h2 class="section-title">What is a JSON Theme?</h2>
+  <p class="section-desc">A single configuration file that controls the entire visual appearance of your Power BI report.</p>
+
+  <div class="card">
+    <div class="card-head">
+      <span class="card-icon">📄</span>
+      <div>
+        <div class="card-title">JSON — JavaScript Object Notation</div>
+        <div class="card-subtitle">A text-based key-value data format</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <p style="font-size:0.88rem;color:var(--text2);margin-bottom:16px;">A Power BI JSON theme file defines colors, fonts, borders, backgrounds, and chart defaults for every visual type — in one centralized file. Applying it is a single action that formats everything instantly.</p>
+      <div class="code-wrap">
+        <div class="code-bar"><span class="code-bar-lang">JSON — Basic Structure</span><div class="dots"><div class="dot2" style="background:#fc8181"></div><div class="dot2" style="background:#f0b429"></div><div class="dot2" style="background:#68d391"></div></div></div>
+        <pre>{
+  <span class="ck">"name"</span>: <span class="cs">"Anshul_RA1_SalesAnalytics"</span>,     <span class="cm">← Theme identifier</span>
+  <span class="ck">"dataColors"</span>: [<span class="cs">"#4FACFE"</span>, <span class="cs">"#00D4B4"</span>],  <span class="cm">← Chart colors</span>
+  <span class="ck">"background"</span>: <span class="cs">"#1E2130"</span>,              <span class="cm">← Page background</span>
+  <span class="ck">"foreground"</span>: <span class="cs">"#FFFFFF"</span>,              <span class="cm">← Default text</span>
+  <span class="ck">"visualStyles"</span>: {                    <span class="cm">← Per-visual settings</span>
+    <span class="ck">"card"</span>: { ... },                    <span class="cm">← Only cards</span>
+    <span class="ck">"slicer"</span>: { ... },                  <span class="cm">← Only slicers</span>
+    <span class="ck">"lineChart"</span>: { ... }                <span class="cm">← Only line charts</span>
+  }
+}</pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="compare">
+    <div class="compare-box bad">
+      <div class="compare-label red">❌ Without JSON Theme (Manual)</div>
+      <div class="compare-item">Select Card 1 → Format → Background → set color</div>
+      <div class="compare-item">Select Card 2 → Format → Background → same color</div>
+      <div class="compare-item">Select Card 3 → Format → Background → same color</div>
+      <div class="compare-item">Select Line Chart → Format → Background → same color</div>
+      <div class="compare-item">Select Bar Chart → Format → Background → same color</div>
+      <div class="compare-item">50+ steps per page × 5 pages = 250+ manual steps!</div>
+      <div class="compare-item">Human errors → Inconsistent colors</div>
+    </div>
+    <div class="compare-box good">
+      <div class="compare-label green">✅ With JSON Theme</div>
+      <div class="compare-item">Create theme.json file (one time!)</div>
+      <div class="compare-item">View → Themes → Browse → Upload</div>
+      <div class="compare-item">DONE! All visuals formatted instantly!</div>
+      <div class="compare-item">All 5 pages consistent automatically</div>
+      <div class="compare-item">No human error possible</div>
+      <div class="compare-item">Takes 30 seconds total!</div>
+    </div>
+  </div>
+</div>
+
+<hr class="sep" style="margin:0;"/>
+
+<!-- WHY -->
+<div class="wrap" id="why">
+  <div class="section-tag">SECTION 02</div>
+  <h2 class="section-title">Why JSON Theme is Important</h2>
+  <p class="section-desc">Five compelling reasons every professional Power BI developer uses themes.</p>
+
+  <div class="card">
+    <div class="card-head"><span class="card-icon">🎨</span><div><div class="card-title">Reason 1 — Consistency Across Entire Report</div></div></div>
+    <div class="card-body">
+      <div class="compare">
+        <div class="compare-box bad">
+          <div class="compare-label red">Without Theme</div>
+          <div class="compare-item">Page 1 cards → #252B3B</div>
+          <div class="compare-item">Page 2 cards → #253040 (slightly different!)</div>
+          <div class="compare-item">Page 3 cards → White (forgot!)</div>
+          <div class="compare-item">Looks unprofessional!</div>
+        </div>
+        <div class="compare-box good">
+          <div class="compare-label green">With Theme</div>
+          <div class="compare-item">Page 1 cards → #252B3B ✅</div>
+          <div class="compare-item">Page 2 cards → #252B3B ✅</div>
+          <div class="compare-item">Page 3 cards → #252B3B ✅</div>
+          <div class="compare-item">100% consistent automatically!</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-head"><span class="card-icon">🏢</span><div><div class="card-title">Reason 2 — Brand Compliance in Enterprise</div></div></div>
+    <div class="card-body">
+      <p style="font-size:0.85rem;color:var(--text2);margin-bottom:14px;">Real companies have strict brand guidelines. A JSON theme enforces them automatically — new team members cannot accidentally use wrong colors.</p>
+      <div class="visual-diagram">Company Brand Guidelines:
+→ Primary color: #0078D4 (Microsoft Blue)
+→ Font: Segoe UI always
+→ Never use red for positive values
+→ Always use rounded corners (radius: 8)
+
+Without theme: Every developer decides individually → Brand violations!
+With theme:    Rules enforced automatically → Perfect brand compliance!</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-head"><span class="card-icon">🔧</span><div><div class="card-title">Reason 3 — Effortless Maintenance</div></div></div>
+    <div class="card-body">
+      <div class="compare">
+        <div class="compare-box bad">
+          <div class="compare-label red">Without Theme — Color Change</div>
+          <div class="compare-item">Client: "Change primary from blue to teal"</div>
+          <div class="compare-item">Update 50+ visuals manually</div>
+          <div class="compare-item">2-3 hours of work</div>
+          <div class="compare-item">Risk of missing some visuals</div>
+        </div>
+        <div class="compare-box good">
+          <div class="compare-label green">With Theme — Color Change</div>
+          <div class="compare-item">Open JSON file</div>
+          <div class="compare-item">Change "#4FACFE" → "#00D4B4" (1 line!)</div>
+          <div class="compare-item">Re-upload theme</div>
+          <div class="compare-item">ALL visuals updated! — 2 minutes!</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-head"><span class="card-icon">♻️</span><div><div class="card-title">Reason 4 — Reusability Across Projects</div></div></div>
+    <div class="card-body">
+      <div class="visual-diagram">Once you build a good theme:
+→ Project 1: Sales Analytics    ✅ Same theme
+→ Project 2: HR Analytics       ✅ Same theme
+→ Project 3: Finance Reporting  ✅ Same theme
+→ Future client projects        ✅ Same theme
+
+Build once → Use forever!
+Theme becomes your professional signature!</div>
+    </div>
+  </div>
+</div>
+
+<hr class="sep" style="margin:0;"/>
+
+<!-- STRUCTURE -->
+<div class="wrap" id="structure">
+  <div class="section-tag">SECTION 03</div>
+  <h2 class="section-title">JSON Theme Structure</h2>
+  <p class="section-desc">Every property explained — from top level to visual-specific settings.</p>
+
+  <div class="card">
+    <div class="card-head"><span class="card-icon">🏗️</span><div><div class="card-title">Complete Structure Overview</div></div></div>
+    <div class="card-body">
+      <div class="code-wrap">
+        <div class="code-bar"><span class="code-bar-lang">JSON — Full Structure</span><div class="dots"><div class="dot2" style="background:#fc8181"></div><div class="dot2" style="background:#f0b429"></div><div class="dot2" style="background:#68d391"></div></div></div>
+        <pre>{
+  <span class="ck">"name"</span>: <span class="cs">"ThemeName"</span>,          <span class="cm">← Appears in Power BI themes list</span>
+
+  <span class="ck">"dataColors"</span>: [             <span class="cm">← Array of chart/data colors</span>
+    <span class="cs">"#4FACFE"</span>,               <span class="cm">← Color 1 (first data series)</span>
+    <span class="cs">"#00D4B4"</span>,               <span class="cm">← Color 2 (second data series)</span>
+    <span class="cs">"#68D391"</span>                <span class="cm">← Color 3 etc...</span>
+  ],
+
+  <span class="ck">"background"</span>: <span class="cs">"#1E2130"</span>,    <span class="cm">← Default page background</span>
+  <span class="ck">"foreground"</span>: <span class="cs">"#FFFFFF"</span>,    <span class="cm">← Default text color</span>
+  <span class="ck">"tableAccent"</span>: <span class="cs">"#4FACFE"</span>,   <span class="cm">← Table/matrix highlights</span>
+
+  <span class="ck">"visualStyles"</span>: {           <span class="cm">← Per-visual type formatting</span>
+
+    <span class="cn">"*"</span>: {                      <span class="cm">← Applies to ALL visuals</span>
+      <span class="cn">"*"</span>: {                    <span class="cm">← All states</span>
+        <span class="ck">"fontFamily"</span>: [...],
+        <span class="ck">"fontSize"</span>: [...]
+      }
+    },
+
+    <span class="cn">"card"</span>: {                  <span class="cm">← Only Card visuals</span>
+      <span class="cn">"*"</span>: { <span class="ck">"background"</span>: [...] },
+      <span class="cn">"labels"</span>: { ... },        <span class="cm">← Big number formatting</span>
+      <span class="cn">"categoryLabels"</span>: { ... } <span class="cm">← Label text formatting</span>
+    },
+
+    <span class="cn">"slicer"</span>: { ... },         <span class="cm">← Only Slicer visuals</span>
+    <span class="cn">"lineChart"</span>: { ... },      <span class="cm">← Only Line Charts</span>
+    <span class="cn">"barChart"</span>: { ... }        <span class="cm">← Only Bar Charts</span>
+  },
+
+  <span class="ck">"page"</span>: {                    <span class="cm">← Page-level settings</span>
+    <span class="ck">"background"</span>: {            <span class="cm">← Canvas area color</span>
+      <span class="ck">"color"</span>: <span class="cs">"#1E2130"</span>,
+      <span class="ck">"transparency"</span>: 0
+    },
+    <span class="ck">"outspace"</span>: {              <span class="cm">← Outer area color</span>
+      <span class="ck">"color"</span>: <span class="cs">"#141820"</span>,
+      <span class="ck">"transparency"</span>: 0
+    }
+  }
+}</pre>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr class="sep" style="margin:0;"/>
+
+<!-- PARAMETERS -->
+<div class="wrap" id="params">
+  <div class="section-tag">SECTION 04</div>
+  <h2 class="section-title">Complete Parameter Reference</h2>
+  <p class="section-desc">Every property type you will use — with exact JSON syntax.</p>
+
+  <div class="card">
+    <div class="card-head"><span class="card-icon">🎨</span><div><div class="card-title">Background Property</div><div class="card-subtitle">Sets background color of any visual</div></div></div>
+    <div class="card-body">
+      <div class="code-wrap">
+        <div class="code-bar"><span class="code-bar-lang">JSON</span><div class="dots"><div class="dot2" style="background:#fc8181"></div><div class="dot2" style="background:#f0b429"></div><div class="dot2" style="background:#68d391"></div></div></div>
+        <pre><span class="ck">"background"</span>: [{
+  <span class="ck">"color"</span>: {
+    <span class="ck">"solid"</span>: {
+      <span class="ck">"color"</span>: <span class="cs">"#252B3B"</span>  <span class="cm">← Your hex color here</span>
+    }
+  }
+}]</pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-head"><span class="card-icon">🔲</span><div><div class="card-title">Border Property</div><div class="card-subtitle">Visual border with color and rounded corners</div></div></div>
+    <div class="card-body">
+      <div class="code-wrap">
+        <div class="code-bar"><span class="code-bar-lang">JSON</span><div class="dots"><div class="dot2" style="background:#fc8181"></div><div class="dot2" style="background:#f0b429"></div><div class="dot2" style="background:#68d391"></div></div></div>
+        <pre><span class="ck">"border"</span>: [{
+  <span class="ck">"color"</span>: { <span class="ck">"solid"</span>: { <span class="ck">"color"</span>: <span class="cs">"#4FACFE"</span> } },
+  <span class="ck">"show"</span>: <span class="ct">true</span>,    <span class="cm">← true = show border, false = hide</span>
+  <span class="ck">"radius"</span>: <span class="ct">8</span>      <span class="cm">← Corner roundness (0=square, 16=round)</span>
+}]</pre>
+      </div>
+      <div class="info gold"><span class="info-icon">💡</span><span>Radius values: 0 = sharp corners, 4 = subtle, 8 = modern (our theme), 16 = very round (pill shape)</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-head"><span class="card-icon">📝</span><div><div class="card-title">Font Properties</div><div class="card-subtitle">Color, size, and family</div></div></div>
+    <div class="card-body">
+      <div class="code-wrap">
+        <div class="code-bar"><span class="code-bar-lang">JSON</span><div class="dots"><div class="dot2" style="background:#fc8181"></div><div class="dot2" style="background:#f0b429"></div><div class="dot2" style="background:#68d391"></div></div></div>
+        <pre><span class="cm">// Font Color</span>
+<span class="ck">"fontColor"</span>: [{ <span class="ck">"solid"</span>: { <span class="ck">"color"</span>: <span class="cs">"#FFFFFF"</span> } }]
+
+<span class="cm">// Font Size (in points)</span>
+<span class="ck">"fontSize"</span>: [{ <span class="ck">"value"</span>: <span class="ct">13</span> }]
+
+<span class="cm">// Font Family</span>
+<span class="ck">"fontFamily"</span>: [{ <span class="ck">"value"</span>: <span class="cs">"Segoe UI Semibold"</span> }]
+
+<span class="cm">// Common font options:</span>
+<span class="cm">// "Segoe UI"          ← Standard</span>
+<span class="cm">// "Segoe UI Semibold" ← Bold headers</span>
+<span class="cm">// "Segoe UI Light"    ← Subtle labels</span>
+<span class="cm">// "DIN"               ← Clean modern</span>
+<span class="cm">// "Calibri"           ← Traditional</span></pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-head"><span class="card-icon">📊</span><div><div class="card-title">dataColors — Chart Color Array</div><div class="card-subtitle">How Power BI assigns colors to data series</div></div></div>
+    <div class="card-body">
+      <div class="code-wrap">
+        <div class="code-bar"><span class="code-bar-lang">JSON</span><div class="dots"><div class="dot2" style="background:#fc8181"></div><div class="dot2" style="background:#f0b429"></div><div class="dot2" style="background:#68d391"></div></div></div>
+        <pre><span class="ck">"dataColors"</span>: [
+  <span class="cs">"#4FACFE"</span>,   <span class="cm">← Index 0 → First series (most important!)</span>
+  <span class="cs">"#00D4B4"</span>,   <span class="cm">← Index 1 → Second series</span>
+  <span class="cs">"#68D391"</span>,   <span class="cm">← Index 2 → Third series</span>
+  <span class="cs">"#F0B429"</span>,   <span class="cm">← Index 3 → Fourth series</span>
+  <span class="cs">"#FC8181"</span>,   <span class="cm">← Index 4 → Fifth series</span>
+  <span class="cs">"#B794F4"</span>    <span class="cm">← Index 5+ → Additional series</span>
+]
+
+<span class="cm">// Example — Line chart with 4 years:</span>
+<span class="cm">// 2014 line → #4FACFE (Blue)</span>
+<span class="cm">// 2015 line → #00D4B4 (Teal)</span>
+<span class="cm">// 2016 line → #68D391 (Green)</span>
+<span class="cm">// 2017 line → #F0B429 (Gold)</span></pre>
+      </div>
+      <div class="info blue"><span class="info-icon">💡</span><span>Always put your most important/primary brand color at index 0 — it will appear on the most prominent data series first!</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-head"><span class="card-icon">⚡</span><div><div class="card-title">Wildcard "*" — Global Defaults</div><div class="card-subtitle">Apply settings to every visual at once</div></div></div>
+    <div class="card-body">
+      <div class="code-wrap">
+        <div class="code-bar"><span class="code-bar-lang">JSON</span><div class="dots"><div class="dot2" style="background:#fc8181"></div><div class="dot2" style="background:#f0b429"></div><div class="dot2" style="background:#68d391"></div></div></div>
+        <pre><span class="ck">"visualStyles"</span>: {
+  <span class="cn">"*"</span>: {                  <span class="cm">← "*" = ALL visual types</span>
+    <span class="cn">"*"</span>: {                <span class="cm">← "*" = ALL states</span>
+      <span class="ck">"fontFamily"</span>: [{ <span class="ck">"value"</span>: <span class="cs">"Segoe UI"</span> }],
+      <span class="ck">"fontSize"</span>: [{ <span class="ck">"value"</span>: <span class="ct">11</span> }],
+      <span class="ck">"background"</span>: [{
+        <span class="ck">"color"</span>: { <span class="ck">"solid"</span>: { <span class="ck">"color"</span>: <span class="cs">"#252B3B"</span> } }
+      }]
+    }
+  },
+
+  <span class="cm">// This overrides the global default for cards only:</span>
+  <span class="cn">"card"</span>: {
+    <span class="cn">"labels"</span>: {
+      <span class="ck">"fontSize"</span>: [{ <span class="ck">"value"</span>: <span class="ct">28</span> }]  <span class="cm">← Cards get 28pt, others get 11pt</span>
+    }
+  }
+}
+
+<span class="cm">// Priority: Manual override > Visual specific > Wildcard "*"</span></pre>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr class="sep" style="margin:0;"/>
+
+<!-- VISUAL TYPES -->
+<div class="wrap" id="visuals">
+  <div class="section-tag">SECTION 05</div>
+  <h2 class="section-title">Visual-Specific Formatting</h2>
+  <p class="section-desc">Sub-sections for each visual type — what each property controls.</p>
+
+  <div class="card">
+    <div class="card-head"><span class="card-icon">🃏</span><div><div class="card-title">Card Visual — Sub-sections</div></div></div>
+    <div class="card-body">
+      <div class="visual-diagram">┌──────────────────────────┐
+│                          │
+│         $2.3M            │ ← "labels" → color, fontSize, fontFamily
+│        Total Sales       │ ← "categoryLabels" → color, fontSize
+│                          │
+└──────────────────────────┘
+↑ Background color → "*" → "background"
+↑ Border color/radius → "*" → "border"</div>
+      <div class="code-wrap" style="margin-top:12px;">
+        <div class="code-bar"><span class="code-bar-lang">JSON — Card</span><div class="dots"><div class="dot2" style="background:#fc8181"></div><div class="dot2" style="background:#f0b429"></div><div class="dot2" style="background:#68d391"></div></div></div>
+        <pre><span class="cn">"card"</span>: {
+  <span class="cn">"*"</span>: {
+    <span class="ck">"background"</span>: [{ <span class="ck">"color"</span>: { <span class="ck">"solid"</span>: { <span class="ck">"color"</span>: <span class="cs">"#252B3B"</span> } } }],
+    <span class="ck">"border"</span>: [{ <span class="ck">"color"</span>: { <span class="ck">"solid"</span>: { <span class="ck">"color"</span>: <span class="cs">"#4FACFE"</span> } }, <span class="ck">"show"</span>: <span class="ct">true</span>, <span class="ck">"radius"</span>: <span class="ct">8</span> }]
+  },
+  <span class="cn">"labels"</span>: {                         <span class="cm">← The BIG number ($2.3M)</span>
+    <span class="ck">"color"</span>: [{ <span class="ck">"solid"</span>: { <span class="ck">"color"</span>: <span class="cs">"#4FACFE"</span> } }],
+    <span class="ck">"fontSize"</span>: [{ <span class="ck">"value"</span>: <span class="ct">28</span> }],
+    <span class="ck">"fontFamily"</span>: [{ <span class="ck">"value"</span>: <span class="cs">"Segoe UI Semibold"</span> }]
+  },
+  <span class="cn">"categoryLabels"</span>: {                 <span class="cm">← "Total Sales" text below</span>
+    <span class="ck">"color"</span>: [{ <span class="ck">"solid"</span>: { <span class="ck">"color"</span>: <span class="cs">"#A0AEC0"</span> } }],
+    <span class="ck">"fontSize"</span>: [{ <span class="ck">"value"</span>: <span class="ct">11</span> }]
+  }
+}</pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-head"><span class="card-icon">🔽</span><div><div class="card-title">Slicer Visual — Sub-sections</div></div></div>
+    <div class="card-body">
+      <div class="visual-diagram">┌────────────────┐
+│ Year           │ ← "header" → fontColor, fontSize, background
+│ All        [▼] │ ← "items" → fontColor, fontSize, background
+└────────────────┘
+↑ Outer border → "*" → "border"</div>
+      <div class="code-wrap" style="margin-top:12px;">
+        <div class="code-bar"><span class="code-bar-lang">JSON — Slicer</span><div class="dots"><div class="dot2" style="background:#fc8181"></div><div class="dot2" style="background:#f0b429"></div><div class="dot2" style="background:#68d391"></div></div></div>
+        <pre><span class="cn">"slicer"</span>: {
+  <span class="cn">"*"</span>: {
+    <span class="ck">"background"</span>: [{ <span class="ck">"color"</span>: { <span class="ck">"solid"</span>: { <span class="ck">"color"</span>: <span class="cs">"#252B3B"</span> } } }],
+    <span class="ck">"border"</span>: [{ <span class="ck">"color"</span>: { <span class="ck">"solid"</span>: { <span class="ck">"color"</span>: <span class="cs">"#4FACFE"</span> } }, <span class="ck">"show"</span>: <span class="ct">true</span>, <span class="ck">"radius"</span>: <span class="ct">6</span> }]
+  },
+  <span class="cn">"header"</span>: {                       <span class="cm">← "Year" / "Region" label</span>
+    <span class="ck">"fontColor"</span>: [{ <span class="ck">"solid"</span>: { <span class="ck">"color"</span>: <span class="cs">"#FFFFFF"</span> } }],
+    <span class="ck">"fontSize"</span>: [{ <span class="ck">"value"</span>: <span class="ct">11</span> }],
+    <span class="ck">"fontFamily"</span>: [{ <span class="ck">"value"</span>: <span class="cs">"Segoe UI Semibold"</span> }]
+  },
+  <span class="cn">"items"</span>: {                        <span class="cm">← Dropdown option values</span>
+    <span class="ck">"fontColor"</span>: [{ <span class="ck">"solid"</span>: { <span class="ck">"color"</span>: <span class="cs">"#FFFFFF"</span> } }],
+    <span class="ck">"fontSize"</span>: [{ <span class="ck">"value"</span>: <span class="ct">11</span> }]
+  }
+}</pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-head"><span class="card-icon">📈</span><div><div class="card-title">Line Chart — Sub-sections</div></div></div>
+    <div class="card-body">
+      <div class="visual-diagram">Monthly Sales Trend          ← "title" → fontColor, fontSize
+┌────────────────────────┐
+$300K ─ ──────────────   │ ← "valueAxis" → gridlineColor, labelColor  
+$200K ─                  │
+$100K ─                  │
+      Jan Feb Mar Apr    │ ← "categoryAxis" → labelColor
+└────────────────────────┘
+  ■ 2016  ■ 2017         ← "legend" → labelColor</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-head"><span class="card-icon">🌊</span><div><div class="card-title">Waterfall Chart — Sentiment Colors</div></div></div>
+    <div class="card-body">
+      <div class="code-wrap">
+        <div class="code-bar"><span class="code-bar-lang">JSON — Waterfall</span><div class="dots"><div class="dot2" style="background:#fc8181"></div><div class="dot2" style="background:#f0b429"></div><div class="dot2" style="background:#68d391"></div></div></div>
+        <pre><span class="cn">"waterfallChart"</span>: {
+  <span class="cn">"sentimentColors"</span>: {
+    <span class="ck">"totalBar"</span>: <span class="cs">"#4FACFE"</span>,      <span class="cm">← Starting/ending total bar</span>
+    <span class="ck">"increasedBar"</span>: <span class="cs">"#68D391"</span>, <span class="cm">← Positive growth bar (Green)</span>
+    <span class="ck">"decreasedBar"</span>: <span class="cs">"#FC8181"</span>  <span class="cm">← Negative/decline bar (Red)</span>
+  }
+}</pre>
+      </div>
+      <div class="info green"><span class="info-icon">💡</span><span>Sentiment colors make waterfall charts intuitive — green for growth, red for decline. No need for legends!</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-head"><span class="card-icon">📊</span><div><div class="card-title">Matrix Visual — Alternating Rows (Zebra Striping)</div></div></div>
+    <div class="card-body">
+      <div class="code-wrap">
+        <div class="code-bar"><span class="code-bar-lang">JSON — Matrix</span><div class="dots"><div class="dot2" style="background:#fc8181"></div><div class="dot2" style="background:#f0b429"></div><div class="dot2" style="background:#68d391"></div></div></div>
+        <pre><span class="cn">"matrix"</span>: {
+  <span class="cn">"header"</span>: {
+    <span class="ck">"fontColor"</span>: [{ <span class="ck">"solid"</span>: { <span class="ck">"color"</span>: <span class="cs">"#FFFFFF"</span> } }],
+    <span class="ck">"background"</span>: [{ <span class="ck">"color"</span>: { <span class="ck">"solid"</span>: { <span class="ck">"color"</span>: <span class="cs">"#1E2130"</span> } } }]
+  },
+  <span class="cn">"values"</span>: {
+    <span class="ck">"fontColorPrimary"</span>: [{ <span class="ck">"solid"</span>: { <span class="ck">"color"</span>: <span class="cs">"#FFFFFF"</span> } }],
+    <span class="ck">"backgroundColorPrimary"</span>: [{ <span class="ck">"color"</span>: { <span class="ck">"solid"</span>: { <span class="ck">"color"</span>: <span class="cs">"#252B3B"</span> } } }],
+    <span class="ck">"fontColorSecondary"</span>: [{ <span class="ck">"solid"</span>: { <span class="ck">"color"</span>: <span class="cs">"#A0AEC0"</span> } }],      <span class="cm">← Even rows</span>
+    <span class="ck">"backgroundColorSecondary"</span>: [{ <span class="ck">"color"</span>: { <span class="ck">"solid"</span>: { <span class="ck">"color"</span>: <span class="cs">"#1E2A3B"</span> } } }] <span class="cm">← Even rows</span>
+  },
+  <span class="cn">"totals"</span>: {
+    <span class="ck">"fontColor"</span>: [{ <span class="ck">"solid"</span>: { <span class="ck">"color"</span>: <span class="cs">"#4FACFE"</span> } }],
+    <span class="ck">"background"</span>: [{ <span class="ck">"color"</span>: { <span class="ck">"solid"</span>: { <span class="ck">"color"</span>: <span class="cs">"#1E2130"</span> } } }]
+  }
+}</pre>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr class="sep" style="margin:0;"/>
+
+<!-- COLORS -->
+<div class="wrap" id="colors">
+  <div class="section-tag">SECTION 06</div>
+  <h2 class="section-title">Our Project Color System</h2>
+  <p class="section-desc">Every color in Anshul_RA1_SalesAnalytics theme — with usage rules.</p>
+
+  <div class="swatches">
+    <div class="swatch"><div class="swatch-color" style="background:#1E2130;"></div><div class="swatch-info"><div class="swatch-name">Dark Navy</div><div class="swatch-hex">#1E2130</div><div class="swatch-use">Page background</div></div></div>
+    <div class="swatch"><div class="swatch-color" style="background:#252B3B;"></div><div class="swatch-info"><div class="swatch-name">Card Dark</div><div class="swatch-hex">#252B3B</div><div class="swatch-use">All visual backgrounds</div></div></div>
+    <div class="swatch"><div class="swatch-color" style="background:#141820;"></div><div class="swatch-info"><div class="swatch-name">Deep Navy</div><div class="swatch-hex">#141820</div><div class="swatch-use">Wallpaper / outer area</div></div></div>
+    <div class="swatch"><div class="swatch-color" style="background:#2D3748;"></div><div class="swatch-info"><div class="swatch-name">Border Dark</div><div class="swatch-hex">#2D3748</div><div class="swatch-use">Subtle borders, gridlines</div></div></div>
+    <div class="swatch"><div class="swatch-color" style="background:#4FACFE;"></div><div class="swatch-info"><div class="swatch-name">Primary Blue</div><div class="swatch-hex">#4FACFE</div><div class="swatch-use">KPI numbers, borders, accents</div></div></div>
+    <div class="swatch"><div class="swatch-color" style="background:#00D4B4;"></div><div class="swatch-info"><div class="swatch-name">Teal</div><div class="swatch-hex">#00D4B4</div><div class="swatch-use">Secondary data series</div></div></div>
+    <div class="swatch"><div class="swatch-color" style="background:#68D391;"></div><div class="swatch-info"><div class="swatch-name">Green</div><div class="swatch-hex">#68D391</div><div class="swatch-use">Positive values, growth</div></div></div>
+    <div class="swatch"><div class="swatch-color" style="background:#F0B429;"></div><div class="swatch-info"><div class="swatch-name">Gold</div><div class="swatch-hex">#F0B429</div><div class="swatch-use">Attention, warnings</div></div></div>
+    <div class="swatch"><div class="swatch-color" style="background:#FC8181;"></div><div class="swatch-info"><div class="swatch-name">Red</div><div class="swatch-hex">#FC8181</div><div class="swatch-use">Negative values, decline</div></div></div>
+    <div class="swatch"><div class="swatch-color" style="background:#B794F4;"></div><div class="swatch-info"><div class="swatch-name">Purple</div><div class="swatch-hex">#B794F4</div><div class="swatch-use">Additional data series</div></div></div>
+    <div class="swatch"><div class="swatch-color" style="background:#FFFFFF;border:1px solid #2D3748;"></div><div class="swatch-info"><div class="swatch-name">White</div><div class="swatch-hex">#FFFFFF</div><div class="swatch-use">Primary text, titles</div></div></div>
+    <div class="swatch"><div class="swatch-color" style="background:#A0AEC0;"></div><div class="swatch-info"><div class="swatch-name">Light Grey</div><div class="swatch-hex">#A0AEC0</div><div class="swatch-use">Secondary labels, subtitles</div></div></div>
+  </div>
+</div>
+
+<hr class="sep" style="margin:0;"/>
+
+<!-- HOW TO APPLY -->
+<div class="wrap" id="apply">
+  <div class="section-tag">SECTION 07</div>
+  <h2 class="section-title">How to Apply a Theme</h2>
+  <p class="section-desc">Step by step — from saving the file to seeing results in Power BI.</p>
+
+  <div class="steps-list">
+    <div class="step">
+      <div class="step-left"><div class="step-num">1</div><div class="step-line"></div></div>
+      <div class="step-right">
+        <div class="step-title">Save the JSON file</div>
+        <div class="step-desc">Save as <code style="font-family:var(--mono);background:var(--bg2);padding:2px 6px;border-radius:4px;color:var(--green);">Anshul_RA1_Theme.json</code> in your project folder: <code style="font-family:var(--mono);background:var(--bg2);padding:2px 6px;border-radius:4px;color:var(--green);">01_Sales_Analytics/templates/</code></div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-left"><div class="step-num">2</div><div class="step-line"></div></div>
+      <div class="step-right">
+        <div class="step-title">Open View tab in Power BI Desktop</div>
+        <div class="step-desc">Top ribbon → View tab → Find the "Themes" section on the left side</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-left"><div class="step-num">3</div><div class="step-line"></div></div>
+      <div class="step-right">
+        <div class="step-title">Browse for themes</div>
+        <div class="step-desc">Click the dropdown arrow next to the theme thumbnails → "Browse for themes" → Navigate to your .json file → Open</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-left"><div class="step-num">4</div><div class="step-line"></div></div>
+      <div class="step-right">
+        <div class="step-title">Theme applies instantly!</div>
+        <div class="step-desc">All visuals across all pages update immediately. Check cards, slicers, charts — all should reflect the new colors and fonts.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-left"><div class="step-num">5</div></div>
+      <div class="step-right">
+        <div class="step-title">Fine-tune individual visuals if needed</div>
+        <div class="step-desc">Select any visual → Format pane → Override specific settings. This only affects that one visual — the theme file is unchanged. Manual overrides always take priority over the theme.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="info gold" style="margin-top:20px;"><span class="info-icon">⚠️</span><span><strong>Important:</strong> Save your JSON theme file in the templates/ folder inside your project and commit it to GitHub. This way anyone cloning your repo can apply the same theme — essential for team projects!</span></div>
+</div>
+
+<hr class="sep" style="margin:0;"/>
+
+<!-- MISTAKES -->
+<div class="wrap">
+  <div class="section-tag">SECTION 08</div>
+  <h2 class="section-title">Common Mistakes to Avoid</h2>
+  <p class="section-desc">Learn from these before you encounter them.</p>
+
+  <div class="mistakes">
+    <div class="mistake">
+      <div class="mistake-title">❌ Too Many Colors</div>
+      <div class="mistake-fix">Using 15 different colors in dataColors makes charts look chaotic. <strong>Stick to 5-6 primary colors max.</strong></div>
+    </div>
+    <div class="mistake">
+      <div class="mistake-title">❌ Low Contrast Text</div>
+      <div class="mistake-fix">Dark background + dark text = unreadable. <strong>Always check contrast ratio — minimum 4.5:1 for readability.</strong></div>
+    </div>
+    <div class="mistake">
+      <div class="mistake-title">❌ Inconsistent Radius</div>
+      <div class="mistake-fix">Some visuals rounded, some sharp looks messy. <strong>Use same radius value everywhere in the theme.</strong></div>
+    </div>
+    <div class="mistake">
+      <div class="mistake-title">❌ Not Testing Preview Mode</div>
+      <div class="mistake-fix">Edit mode shows handles and borders. <strong>Press Ctrl+Shift+F11 to preview the actual end-user view.</strong></div>
+    </div>
+    <div class="mistake">
+      <div class="mistake-title">❌ Forgetting Page Background</div>
+      <div class="mistake-fix">Setting visual backgrounds without setting page background leaves white canvas. <strong>Always set both "background" and "outspace" in the page section.</strong></div>
+    </div>
+    <div class="mistake">
+      <div class="mistake-title">❌ Not Saving to Git</div>
+      <div class="mistake-fix">Theme file not committed means team cannot reproduce your design. <strong>Always commit theme.json to the templates/ folder.</strong></div>
+    </div>
+  </div>
+</div>
+
+<hr class="sep" style="margin:0;"/>
+
+<!-- INTERVIEW -->
+<div class="wrap" id="interview">
+  <div class="section-tag">SECTION 09</div>
+  <h2 class="section-title">Interview Questions</h2>
+  <p class="section-desc">Common questions about Power BI themes — with strong answers.</p>
+
+  <div class="qa-list">
+    <div class="qa-item">
+      <div class="qa-q"><span class="qa-q-icon">Q</span><div class="qa-q-text">What is a Power BI JSON theme file and why would you use one?</div></div>
+      <div class="qa-a">A JSON theme file is a centralized configuration file that defines the visual appearance of an entire Power BI report — colors, fonts, borders, backgrounds, and chart defaults for every visual type. I use it because it ensures 100% design consistency across all pages and visuals, enforces brand guidelines automatically, and makes maintenance trivial. If a brand color needs to change, updating one line in the JSON file instantly updates every visual in the report rather than requiring 50+ manual changes.</div>
+    </div>
+    <div class="qa-item">
+      <div class="qa-q"><span class="qa-q-icon">Q</span><div class="qa-q-text">How does the wildcard "*" in visualStyles work?</div></div>
+      <div class="qa-a">The wildcard "*" in visualStyles applies settings to every visual type when used as the key. A nested "*" applies to all states of that visual. It acts as a global default — the lowest priority in the cascade. More specific rules like "card" override the wildcard for card visuals only. Individual manual formatting on a specific visual always takes the highest priority and overrides both the wildcard and visual-specific theme settings.</div>
+    </div>
+    <div class="qa-item">
+      <div class="qa-q"><span class="qa-q-icon">Q</span><div class="qa-q-text">What is dataColors and why does the order of colors matter?</div></div>
+      <div class="qa-a">dataColors is an array of hex color codes that Power BI cycles through when displaying multiple data series in charts. The order matters because the first color at index 0 goes to the first data series — the most prominent one. I always place the primary brand color at index 0 so it appears on the most important data. For example, in a line chart showing 4 years, index 0 gets the first year and index 3 gets the last year.</div>
+    </div>
+    <div class="qa-item">
+      <div class="qa-q"><span class="qa-q-icon">Q</span><div class="qa-q-text">How do you apply a JSON theme in Power BI Desktop?</div></div>
+      <div class="qa-a">In Power BI Desktop, go to the View tab, click the dropdown arrow in the Themes section, select "Browse for themes", navigate to the JSON file, and open it. The theme applies instantly across all pages. Individual visuals can still be manually overridden after application — manual formatting always takes priority over the theme settings.</div>
+    </div>
+    <div class="qa-item">
+      <div class="qa-q"><span class="qa-q-icon">Q</span><div class="qa-q-text">What is the difference between background and outspace in the page section?</div></div>
+      <div class="qa-a">Background sets the canvas area color — the actual report page where visuals are placed. Outspace sets the color of the area outside the canvas boundary — the grey border region visible in edit mode. Setting both creates a cohesive dark environment during development. In presentation mode, only the background color is visible to end users.</div>
+    </div>
+    <div class="qa-item">
+      <div class="qa-q"><span class="qa-q-icon">Q</span><div class="qa-q-text">How would you handle a client request to change the primary brand color across an existing report?</div></div>
+      <div class="qa-a">If the report was built with a JSON theme, it is a two-minute change — open the JSON file, find and replace the old color hex code with the new one, save, and re-upload the theme. All visuals update instantly with zero risk of missing any. This is exactly why I always use JSON themes in production reports — design changes that would take hours manually become trivial with a centralized theme file.</div>
+    </div>
+  </div>
+</div>
+
+<hr class="sep" style="margin:0;"/>
+
+<footer>
+  <div>ANSHUL-RA1 · DATA_ANALYTICS_POWERBI</div>
+  <div>Power BI JSON Theme — Complete Teaching Guide</div>
+  <div style="margin-top:6px;color:var(--border2);">
+    What is JSON Theme · Why Use It · Structure · Parameters · Colors · Visual Types · How to Apply · Interview Q&A
+  </div>
+</footer>
+
+</body>
+</html>
