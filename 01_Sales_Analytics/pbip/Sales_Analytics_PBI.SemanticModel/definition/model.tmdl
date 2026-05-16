@@ -21,5 +21,10 @@ ref table LocalDateTable_cc5902cb-0a38-496d-a60f-e2c0835441bf
 ref table dim_Date
 ref table _Measures
 
+ref role West_Region
+ref role East_Region
+ref role Central_Region
+ref role South_Region
+
 ref cultureInfo en-US
 
