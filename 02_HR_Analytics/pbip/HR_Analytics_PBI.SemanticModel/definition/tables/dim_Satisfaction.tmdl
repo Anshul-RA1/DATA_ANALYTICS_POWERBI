@@ -1,0 +1,64 @@
+table dim_Satisfaction
+	lineageTag: 3dfd7d96-74f9-4d15-856c-f42f1dce27e3
+
+	column EmployeeNumber
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 91eea80c-ad41-4112-9d4e-7bce534781a8
+		summarizeBy: none
+		sourceColumn: EmployeeNumber
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column EnvironmentSatisfaction
+		dataType: int64
+		formatString: 0
+		lineageTag: 0d3a5afb-e42f-492f-ba7a-44e6c8d6d082
+		summarizeBy: none
+		sourceColumn: EnvironmentSatisfaction
+
+		annotation SummarizationSetBy = Automatic
+
+	column JobSatisfaction
+		dataType: int64
+		formatString: 0
+		lineageTag: af4c9da0-8275-42f3-8c5a-dcbc5aca26b5
+		summarizeBy: none
+		sourceColumn: JobSatisfaction
+
+		annotation SummarizationSetBy = Automatic
+
+	column RelationshipSatisfaction
+		dataType: int64
+		formatString: 0
+		lineageTag: 73590220-c107-473b-9ccf-b3163bf09f6b
+		summarizeBy: none
+		sourceColumn: RelationshipSatisfaction
+
+		annotation SummarizationSetBy = Automatic
+
+	column WorkLifeBalance
+		dataType: int64
+		formatString: 0
+		lineageTag: 4887379f-e45b-4865-83ef-19db863cd976
+		summarizeBy: none
+		sourceColumn: WorkLifeBalance
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_Satisfaction = m
+		mode: import
+		source =
+				let
+				    Source = RAW_HR_DATA,
+				    #"Removed Other Columns" = Table.SelectColumns(Source,{"EmployeeNumber", "EnvironmentSatisfaction", "JobSatisfaction", "RelationshipSatisfaction", "WorkLifeBalance"})
+				in
+				    #"Removed Other Columns"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

@@ -1,14 +1,2 @@
-# Dataset files
-*.xlsx
-*.xls
-*.csv
-
-# Power BI temp files
-*.pbix.lock
-*.pbip.lock
-.pbi/
-
-# Windows files
-Thumbs.db
-desktop.ini
-*.tmp
+**/.pbi/localSettings.json
+**/.pbi/cache.abf

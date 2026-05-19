@@ -1,0 +1,17 @@
+relationship AutoDetected_12bd89a6-008d-485f-9a1e-d84713dbbf73
+	fromColumn: fact_HR.EmployeeNumber
+	toColumn: dim_Employee.EmployeeNumber
+
+relationship 9ce32699-cf33-4daf-abf1-be88233eae3a
+	joinOnDateBehavior: datePartOnly
+	fromColumn: dim_Date.Date
+	toColumn: LocalDateTable_cf3c17b1-ba66-47fd-968c-5c1159659b14.Date
+
+relationship a7ae8392-c79d-bbd6-9087-dee91c14b5a0
+	fromColumn: fact_HR.EmployeeNumber
+	toColumn: dim_Job.EmployeeNumber
+
+relationship 5308cfd7-d440-adfe-c859-ff87e9cacfed
+	fromColumn: fact_HR.EmployeeNumber
+	toColumn: dim_Satisfaction.EmployeeNumber
+

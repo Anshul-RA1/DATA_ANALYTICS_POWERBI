@@ -1,0 +1,78 @@
+table dim_Job
+	lineageTag: 90a544f7-0e19-4304-ac04-0ebf8638743a
+
+	column BusinessTravel
+		dataType: string
+		lineageTag: e2491702-65f0-4416-a948-b561969bc7f8
+		summarizeBy: none
+		sourceColumn: BusinessTravel
+
+		annotation SummarizationSetBy = Automatic
+
+	column Department
+		dataType: string
+		lineageTag: 2b2401aa-f81f-4423-8aa7-0d4874d2079a
+		summarizeBy: none
+		sourceColumn: Department
+
+		annotation SummarizationSetBy = Automatic
+
+	column EmployeeNumber
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 177647cc-44a3-4614-a87b-00bd62a3de77
+		summarizeBy: none
+		sourceColumn: EmployeeNumber
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column JobInvolvement
+		dataType: int64
+		formatString: 0
+		lineageTag: 90492ba3-0d81-410f-8c0f-16b78fa1ac55
+		summarizeBy: none
+		sourceColumn: JobInvolvement
+
+		annotation SummarizationSetBy = Automatic
+
+	column JobLevel
+		dataType: int64
+		formatString: 0
+		lineageTag: fe0bc552-0747-4ca8-980a-d193f4f6307a
+		summarizeBy: none
+		sourceColumn: JobLevel
+
+		annotation SummarizationSetBy = Automatic
+
+	column JobRole
+		dataType: string
+		lineageTag: 1c9bb9dc-0ed8-41a5-97a2-0deedc954d3e
+		summarizeBy: none
+		sourceColumn: JobRole
+
+		annotation SummarizationSetBy = Automatic
+
+	column OverTime
+		dataType: string
+		lineageTag: f99436c1-53bb-40b9-805d-8d92c6513cd2
+		summarizeBy: none
+		sourceColumn: OverTime
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_Job = m
+		mode: import
+		source =
+				let
+				    Source = RAW_HR_DATA,
+				    #"Removed Other Columns" = Table.SelectColumns(Source,{"BusinessTravel", "Department", "EmployeeNumber", "JobInvolvement", "JobLevel", "JobRole", "OverTime"})
+				in
+				    #"Removed Other Columns"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

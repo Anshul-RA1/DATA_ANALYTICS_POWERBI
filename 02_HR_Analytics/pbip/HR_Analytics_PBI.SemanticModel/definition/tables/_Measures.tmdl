@@ -1,0 +1,261 @@
+table _Measures
+	lineageTag: 201aa592-c3ad-484a-b9c8-6238ffa44b19
+
+	measure 'Total Employees' = COUNTROWS(fact_HR)
+		formatString: 0
+		lineageTag: f63fd618-fb99-48ec-aaed-a1f7bdbb9d3c
+
+	measure 'Active Employees' = ```
+			
+			    CALCULATE(
+			        COUNTROWS(fact_HR),
+			        fact_HR[Attrition] = "No"
+			    )
+			```
+		formatString: 0
+		lineageTag: f2453bb8-ae67-4f66-b8eb-2633c7a4a4b5
+
+	measure 'Total Attrition' = ```
+			
+			    CALCULATE(
+			        COUNTROWS(fact_HR),
+			        fact_HR[Attrition] = "Yes"
+			    )
+			```
+		formatString: 0
+		lineageTag: 4b090b65-2211-4b3c-a13d-f32119a75d0a
+
+	measure 'Attrition Rate %' = ```
+			
+			    DIVIDE(
+			        [Total Attrition],
+			        [Total Employees],        
+			        0
+			    )
+			```
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 705be7e1-ab09-4abc-a455-a727fc56a32d
+
+	measure 'Attrition Rate YoY' = ```
+			
+			    DIVIDE(
+			        [Total Attrition] -
+			        CALCULATE(
+			            [Total Attrition],
+			            SAMEPERIODLASTYEAR(dim_Date[Date])
+			        ),
+			        CALCULATE(
+			            [Total Attrition],
+			            SAMEPERIODLASTYEAR(dim_Date[Date])
+			        ),
+			        0
+			        )
+			```
+		formatString: 0.00%;-0.00%;0.00%
+		isHidden
+		lineageTag: fc62b650-fa83-43a6-a5f0-cfc4ab79c569
+
+		changedProperty = IsHidden
+
+	measure 'Average Monthly Income' = AVERAGE(fact_HR[MonthlyIncome])
+		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		lineageTag: 57c1be24-030a-4fe8-9f85-2566e740863f
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	measure 'Total Salary Cost' =
+			
+			SUM(fact_HR[MonthlyIncome])
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: f6673f86-7807-43a1-91ab-24eb0b59d831
+
+	measure 'Average Income by Department' = ```
+			
+			    AVERAGEX(
+			        VALUES(dim_Job[Department]),
+			        CALCULATE(
+			            AVERAGE(fact_HR[MonthlyIncome])
+			        )
+			    )
+			```
+		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		lineageTag: 04cd2f6f-d3f0-47e2-a9ad-ee1fa892dcf7
+
+	measure 'Max Monthly Income' = ```
+			
+			    max(fact_HR[MonthlyIncome])
+			```
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: 82609dda-af41-4a43-b413-414d419322da
+
+	measure 'Min Monthly Income' = ```
+			
+			    min(fact_HR[MonthlyIncome])
+			```
+		formatString: \$#,0;(\$#,0);\$#,0
+		lineageTag: 508f0fb7-d54f-46c4-8acf-8bcafa076567
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	measure 'Income Variance' = [Max Monthly Income] - [Min Monthly Income]
+		formatString: \$#,0;(\$#,0);\$#,0
+		lineageTag: 327a26cc-0082-4179-baa9-d56a5446adad
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	measure 'Average Years at Company' = AVERAGE(fact_HR[YearsAtCompany])
+		formatString: 0.0
+		lineageTag: 787eff29-8318-4f0b-9d59-8a5cd54b5813
+
+	measure 'Average Years in Role' = AVERAGE(fact_HR[YearsInCurrentRole])
+		formatString: 0.0
+		lineageTag: ed7391c8-6eb8-430e-a655-81696ee592e8
+
+	measure 'Average Years since Promotion' = AVERAGE(fact_HR[YearsSinceLastPromotion])
+		formatString: 0.0
+		lineageTag: 46b81ee4-fdee-4149-b141-a7c62e99cd46
+
+	measure 'Tenure Band' = ```
+			
+			    SWITCH(
+			        TRUE(),
+			        AVERAGE(fact_HR[YearsAtCompany]) <= 2 , "🔴 0-2 Years",
+			        AVERAGE(fact_HR[YearsAtCompany]) <= 5, "🟡 3-5 Years",
+			        AVERAGE(fact_HR[YearsAtCompany]) <= 10,
+			                                        "🟢 6-10 Years",
+			                                        "🔵 10+ Years"
+			    )
+			```
+		lineageTag: 5c575ecd-86ae-47b6-8c2e-7044303d193f
+
+	measure 'Average Job Satisfaction' = AVERAGE(dim_Satisfaction[JobSatisfaction])
+		formatString: 0.00
+		lineageTag: ec22ac67-99da-4722-94a0-a1da86f767cd
+
+	measure 'Average Work Life Balance' = Average(dim_Satisfaction[WorkLifeBalance])
+		formatString: 0.00
+		lineageTag: 117acfb6-b0db-4789-a1db-9a50c8507bf5
+
+	measure 'Average Environment Satisfaction' = average(dim_Satisfaction[EnvironmentSatisfaction])
+		formatString: 0.00
+		lineageTag: 164bd9df-5d1d-4340-9e77-59038d4edfc5
+
+	measure 'Average Relationship Satisfaction' = average(dim_Satisfaction[RelationshipSatisfaction])
+		formatString: 0.00
+		lineageTag: 44530859-eaea-4f27-a2ca-5a781446ca0c
+
+	measure 'Overall Satisfaction Score' =
+			
+			DIVIDE(
+			    [average Job Satisfaction] +
+			    [Average Work Life Balance] +
+			    [Average Environment Satisfaction] +
+			    [Average Relationship Satisfaction],
+			    4,
+			    0
+			)
+		formatString: 0.00
+		lineageTag: a50c0817-aff2-4cd0-885f-a413d1776adf
+
+	measure 'High Performance Count' = ```
+			
+			    CALCULATE(
+			        COUNTROWS(fact_HR),
+			        fact_HR[PerformanceRating] >= 3
+			    )
+			```
+		formatString: 0
+		lineageTag: 239c4c71-0785-4fdb-afec-311f7a104086
+
+	measure 'Average Performance Rating' = ```
+			AVERAGE(fact_HR[PerformanceRating]) 
+			```
+		lineageTag: 585a60c6-e4c7-4909-b9e0-0225260119bf
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Promotion Overdue' =
+			CALCULATE(
+			    COUNTROWS(fact_HR),
+			    fact_HR[YearsSinceLastPromotion] >= 5
+			)
+		formatString: 0
+		lineageTag: 01d90ad0-d399-4c17-a3a9-2c93e758e7b1
+
+	measure 'Flight Risk' = ```
+			
+			var _LowSatisfaction = AVERAGE(dim_Satisfaction[JobSatisfaction]) <=2
+			var _LongTenureNoPromotion = CALCULATE(
+			            COUNTROWS(fact_HR),
+			            fact_HR[YearsSinceLastPromotion] >=4
+			        )
+			var _OverTime = CALCULATE(
+			            COUNTROWS(dim_Job),
+			            dim_Job[OverTime] = "Yes"
+			    )
+			return 
+			SWITCH(
+			    TRUE(),
+			    _LowSatisfaction && _LongTenureNoPromotion ,
+			                                "🔴 High Risk",
+			    _LowSatisfaction ,          "🟡 Medium Risk",
+			    _LongTenureNoPromotion,     "🟡 Medium Risk",
+			                                "🟢 Low Risk"
+			)
+			```
+		formatString: Text
+		lineageTag: 5d7f9bf1-094e-4e40-bc47-31d10905552b
+
+		annotation PBI_FormatHint = {"isCustom":true}
+
+	measure 'At Risk Employee' =
+			CALCULATE(
+			        COUNTROWS(fact_HR),
+			        dim_Satisfaction[JobSatisfaction] <=2,
+			        fact_HR[YearsSinceLastPromotion] >= 4
+			)
+		formatString: 0
+		lineageTag: 75b42fe1-d706-45e7-81cc-07d94116fe67
+
+	measure 'Overtime Employee Count' = ```
+			
+			    CALCULATE(
+			        COUNTROWS(fact_HR),
+			        dim_Job[OverTime] = "Yes"
+			    )
+			```
+		formatString: 0
+		lineageTag: 38936d72-8718-4f70-ba2d-3aaadf700bdf
+
+	measure 'Overtime Rate %' = ```
+			
+			        DIVIDE(
+			            [Overtime Employee Count],
+			            [Total Employees],
+			            0
+			        )
+			```
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 1af782e3-7fed-493a-a8a7-f3330b737294
+
+	column Column1
+		dataType: string
+		isHidden
+		lineageTag: 548229c2-af85-4049-b65f-c339e849d7db
+		summarizeBy: none
+		sourceColumn: Column1
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition _Measures = m
+		mode: import
+		source =
+				let
+				    Source = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("i44FAA==", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [Column1 = _t])
+				in
+				    Source
+
+	annotation PBI_ResultType = Table
+

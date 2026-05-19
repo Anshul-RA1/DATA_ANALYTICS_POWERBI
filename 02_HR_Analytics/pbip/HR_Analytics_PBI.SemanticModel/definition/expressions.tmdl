@@ -1,0 +1,13 @@
+expression RAW_HR_DATA =
+		let
+		    Source = Csv.Document(File.Contents("C:\Users\HP\Desktop\DATA_ANALYTICS_POWERBI\02_HR_Analytics\data\TechNova_HR_dataset.xlsx.csv"),[Delimiter=",", Columns=35, Encoding=65001, QuoteStyle=QuoteStyle.None]),
+		    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+		    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"Age", Int64.Type}, {"DailyRate", Int64.Type}, {"DistanceFromHome", Int64.Type}, {"EmployeeNumber", Int64.Type}, {"HourlyRate", Int64.Type}, {"MonthlyIncome", Int64.Type}, {"MonthlyRate", Int64.Type}, {"Education", Int64.Type}, {"EmployeeCount", Int64.Type}, {"EnvironmentSatisfaction", Int64.Type}, {"JobInvolvement", Int64.Type}, {"JobLevel", Int64.Type}, {"JobSatisfaction", Int64.Type}, {"NumCompaniesWorked", Int64.Type}, {"PercentSalaryHike", Int64.Type}, {"PerformanceRating", Int64.Type}, {"RelationshipSatisfaction", Int64.Type}, {"StandardHours", Int64.Type}, {"StockOptionLevel", Int64.Type}, {"TotalWorkingYears", Int64.Type}, {"TrainingTimesLastYear", Int64.Type}, {"WorkLifeBalance", Int64.Type}, {"YearsAtCompany", Int64.Type}, {"YearsInCurrentRole", Int64.Type}, {"YearsSinceLastPromotion", Int64.Type}, {"YearsWithCurrManager", Int64.Type}})
+		in
+		    #"Changed Type"
+	lineageTag: a5d77618-ce5b-4917-aba3-d232d41d7953
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
