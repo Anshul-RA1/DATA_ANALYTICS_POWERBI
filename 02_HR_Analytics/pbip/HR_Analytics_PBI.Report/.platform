@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "HR_Analytics_PBI"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "1a92890e-3410-4d9b-a39b-7dee29f92cce"
+  }
+}
