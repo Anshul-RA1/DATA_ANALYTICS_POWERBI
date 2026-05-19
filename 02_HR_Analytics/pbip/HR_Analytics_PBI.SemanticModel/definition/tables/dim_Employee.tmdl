@@ -1,0 +1,87 @@
+table dim_Employee
+	lineageTag: 86408398-05be-449f-97d8-933ca4fef017
+
+	column Age
+		dataType: int64
+		formatString: 0
+		lineageTag: fd180b58-6270-4dd3-b7d3-76e7c8b22711
+		summarizeBy: none
+		sourceColumn: Age
+
+		annotation SummarizationSetBy = Automatic
+
+	column DistanceFromHome
+		dataType: int64
+		formatString: 0
+		lineageTag: aff3acdc-b5c0-4222-91ae-48403be46d84
+		summarizeBy: none
+		sourceColumn: DistanceFromHome
+
+		annotation SummarizationSetBy = Automatic
+
+	column Education
+		dataType: int64
+		formatString: 0
+		lineageTag: 4ed1590b-8759-4c13-9c8c-2a92b6e05cb7
+		summarizeBy: none
+		sourceColumn: Education
+
+		annotation SummarizationSetBy = Automatic
+
+	column EducationField
+		dataType: string
+		lineageTag: b96c0db6-8f36-44e5-aef0-2a8d157e69c3
+		summarizeBy: none
+		sourceColumn: EducationField
+
+		annotation SummarizationSetBy = Automatic
+
+	column EmployeeNumber
+		dataType: int64
+		formatString: 0
+		lineageTag: d300ada2-42c3-4132-addc-75c65394626a
+		summarizeBy: none
+		sourceColumn: EmployeeNumber
+
+		annotation SummarizationSetBy = Automatic
+
+	column Gender
+		dataType: string
+		lineageTag: 0c4d42bb-1732-4ab2-ab93-236b9774990c
+		summarizeBy: none
+		sourceColumn: Gender
+
+		annotation SummarizationSetBy = Automatic
+
+	column MaritalStatus
+		dataType: string
+		lineageTag: b3c96953-ce0b-4088-9872-436e55b31a57
+		summarizeBy: none
+		sourceColumn: MaritalStatus
+
+		annotation SummarizationSetBy = Automatic
+
+	column Over18
+		dataType: string
+		isHidden
+		lineageTag: fe4e56f3-a1e9-4fe0-943f-f6f370f50801
+		summarizeBy: none
+		sourceColumn: Over18
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_Employee = m
+		mode: import
+		source =
+				let
+				    Source = RAW_HR_DATA,
+				    #"Removed Other Columns" = Table.SelectColumns(Source,{"Age", "DistanceFromHome", "Education", "EducationField", "EmployeeNumber", "Gender", "MaritalStatus", "Over18"})
+				in
+				    #"Removed Other Columns"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

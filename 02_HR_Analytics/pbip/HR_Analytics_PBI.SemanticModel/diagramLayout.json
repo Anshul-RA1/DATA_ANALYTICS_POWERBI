@@ -1,0 +1,100 @@
+{
+  "version": "1.1.0",
+  "diagrams": [
+    {
+      "ordinal": 0,
+      "scrollPosition": {
+        "x": 0,
+        "y": 0
+      },
+      "nodes": [
+        {
+          "location": {
+            "x": 0,
+            "y": 168.31726108840394
+          },
+          "nodeIndex": "dim_Employee",
+          "nodeLineageTag": "86408398-05be-449f-97d8-933ca4fef017",
+          "size": {
+            "height": 322.79831932773118,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 177.17070820422356,
+            "y": 573.5251980613034
+          },
+          "nodeIndex": "dim_Job",
+          "nodeLineageTag": "90a544f7-0e19-4304-ac04-0ebf8638743a",
+          "size": {
+            "height": 248,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 496.01551477165003,
+            "y": 0
+          },
+          "nodeIndex": "dim_Satisfaction",
+          "nodeLineageTag": "3dfd7d96-74f9-4d15-856c-f42f1dce27e3",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 542,
+            "y": 280.48427604476797
+          },
+          "nodeIndex": "fact_HR",
+          "nodeLineageTag": "2f28134b-4f55-415c-9d2a-b9fc63ac71dc",
+          "size": {
+            "height": 574.28571428571433,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 854.30122905736437,
+            "y": 265.7625990306517
+          },
+          "nodeIndex": "dim_Date",
+          "nodeLineageTag": "582b4c32-9c12-4292-9cea-06b4a7ced966",
+          "size": {
+            "height": 303.71428571428578,
+            "width": 255.42857142857156
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1159.7298004859358,
+            "y": 0
+          },
+          "nodeIndex": "_Measures",
+          "nodeLineageTag": "201aa592-c3ad-484a-b9c8-6238ffa44b19",
+          "size": {
+            "height": 104,
+            "width": 234
+          },
+          "zIndex": 0
+        }
+      ],
+      "name": "All tables",
+      "zoomValue": 61.025641025641022,
+      "pinKeyFieldsToTop": false,
+      "showExtraHeaderInfo": false,
+      "hideKeyFieldsWhenCollapsed": false,
+      "tablesLocked": false
+    }
+  ],
+  "selectedDiagram": "All tables",
+  "defaultDiagram": "All tables"
+}
