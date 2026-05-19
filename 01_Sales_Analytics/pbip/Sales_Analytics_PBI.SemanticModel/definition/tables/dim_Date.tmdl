@@ -1,0 +1,168 @@
+table dim_Date
+	lineageTag: 1d98d3b2-9c06-46c2-9a44-0cb197817716
+	dataCategory: Time
+
+	column Date
+		dataType: dateTime
+		isKey
+		formatString: Long Date
+		lineageTag: ab3b7cee-abee-4703-a186-fce64347a897
+		summarizeBy: none
+		sourceColumn: Date
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Year
+		dataType: int64
+		formatString: 0
+		lineageTag: 422a85b7-22ec-46ea-ad03-5ddfd03c2ac9
+		summarizeBy: sum
+		sourceColumn: Year
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Quarter
+		dataType: string
+		lineageTag: c78348cd-3fff-4d7b-b10c-8e865ed819de
+		summarizeBy: none
+		sourceColumn: Quarter
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Month Number'
+		dataType: int64
+		formatString: 0
+		lineageTag: 80b5e6f2-c5cb-41b6-b03d-80654fa4a13f
+		summarizeBy: sum
+		sourceColumn: Month Number
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Month Name'
+		dataType: string
+		lineageTag: 6c121e01-727a-4274-a939-ac4169c78102
+		summarizeBy: none
+		sourceColumn: Month Name
+		sortByColumn: 'Month Number'
+
+		changedProperty = IsHidden
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Week Number'
+		dataType: int64
+		formatString: 0
+		lineageTag: 7d929ad2-9fae-4508-8714-1ac5b8cb6d43
+		summarizeBy: sum
+		sourceColumn: Week Number
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Weekday
+		dataType: string
+		lineageTag: e4f98ac1-ca5e-40d4-b247-a2a1a03ad0a4
+		summarizeBy: none
+		sourceColumn: Weekday
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Is Weekend'
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 9a21de7e-fd4c-4997-814f-4e50c50426d5
+		summarizeBy: none
+		sourceColumn: Is Weekend
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_Date = m
+		mode: import
+		source =
+				let
+				    StartDate = #date(2014, 1, 1),
+				    EndDate = #date(2018, 12, 31),
+				
+				    DateList = List.Dates(
+				        StartDate,
+				        Duration.Days(EndDate - StartDate) + 1,
+				        #duration(1, 0, 0, 0)
+				    ),
+				
+				    DateTable = Table.FromList(
+				        DateList,
+				        Splitter.SplitByNothing(),
+				        {"Date"}
+				    ),
+				
+				    ChangedType = Table.TransformColumnTypes(
+				        DateTable,
+				        {{"Date", type date}}
+				    ),
+				
+				    AddYear = Table.AddColumn(
+				        ChangedType, "Year",
+				        each Date.Year([Date]),
+				        Int64.Type
+				    ),
+				
+				    AddQuarter = Table.AddColumn(
+				        AddYear, "Quarter",
+				        each "Q" & Text.From(Date.QuarterOfYear([Date])),
+				        type text
+				    ),
+				
+				    AddMonthNo = Table.AddColumn(
+				        AddQuarter, "Month Number",
+				        each Date.Month([Date]),
+				        Int64.Type
+				    ),
+				
+				    AddMonthName = Table.AddColumn(
+				        AddMonthNo, "Month Name",
+				        each Date.MonthName([Date]),
+				        type text
+				    ),
+				
+				    AddWeekNo = Table.AddColumn(
+				        AddMonthName, "Week Number",
+				        each Date.WeekOfYear([Date]),
+				        Int64.Type
+				    ),
+				
+				    AddWeekday = Table.AddColumn(
+				        AddWeekNo, "Weekday",
+				        each Date.DayOfWeekName([Date]),
+				        type text
+				    ),
+				
+				    AddIsWeekend = Table.AddColumn(
+				        AddWeekday, "Is Weekend",
+				        each Date.DayOfWeek([Date]) >= 5,
+				        type logical
+				    )
+				
+				in
+				    AddIsWeekend
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

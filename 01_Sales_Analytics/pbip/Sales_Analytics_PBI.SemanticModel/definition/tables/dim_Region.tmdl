@@ -1,0 +1,67 @@
+table dim_Region
+	lineageTag: 38d6552d-be04-4535-ac34-1c931e79d87e
+
+	column Country
+		dataType: string
+		lineageTag: 850ec441-637a-47a8-896e-41c8ece100de
+		summarizeBy: none
+		sourceColumn: Country
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column City
+		dataType: string
+		lineageTag: 136936ed-dee7-4a7f-ae74-4b799d25b863
+		summarizeBy: none
+		sourceColumn: City
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column State
+		dataType: string
+		lineageTag: bfaf2297-a96c-4ec1-b4c8-42a8d30f13b1
+		summarizeBy: none
+		sourceColumn: State
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Postal Code'
+		dataType: string
+		lineageTag: ac4d7336-1450-416a-9505-794a467a8cd9
+		summarizeBy: none
+		sourceColumn: Postal Code
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Region
+		dataType: string
+		lineageTag: d5d42051-42bb-410f-a2dc-0c5c3826e05e
+		summarizeBy: none
+		sourceColumn: Region
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_Region = m
+		mode: import
+		source =
+				let
+				    Source = RAW_DATA,
+				    #"Removed Other Columns" = Table.SelectColumns(Source,{"Country", "City", "State", "Postal Code", "Region"}),
+				    #"Removed Duplicates" = Table.Distinct(#"Removed Other Columns", {"Postal Code"})
+				in
+				    #"Removed Duplicates"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,7 @@
+role Central_Region
+	modelPermission: read
+
+	tablePermission dim_Region = [Region] == "Central"
+
+	annotation PBI_Id = 0634da19a09e40599da495d912c02458
+
