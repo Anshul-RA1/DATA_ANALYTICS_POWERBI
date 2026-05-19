@@ -1,0 +1,186 @@
+table fact_HR
+	lineageTag: 2f28134b-4f55-415c-9d2a-b9fc63ac71dc
+
+	column Attrition
+		dataType: string
+		lineageTag: 36c84f14-3157-463c-8b78-c751d2399457
+		summarizeBy: none
+		sourceColumn: Attrition
+
+		annotation SummarizationSetBy = Automatic
+
+	column DailyRate
+		dataType: int64
+		formatString: 0
+		lineageTag: 944ccec3-b65b-46aa-93fa-2c3592a9ed43
+		summarizeBy: sum
+		sourceColumn: DailyRate
+
+		annotation SummarizationSetBy = Automatic
+
+	column EmployeeCount
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: ae8cd3a8-a579-4c64-b8bc-cb5a8e63378e
+		summarizeBy: sum
+		sourceColumn: EmployeeCount
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column EmployeeNumber
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: b43db872-5cbf-4d6f-a28c-7da28e5c2bcb
+		summarizeBy: none
+		sourceColumn: EmployeeNumber
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column HourlyRate
+		dataType: int64
+		formatString: 0
+		lineageTag: 40a0f78a-c844-4559-8e82-16793a1c0057
+		summarizeBy: sum
+		sourceColumn: HourlyRate
+
+		annotation SummarizationSetBy = Automatic
+
+	column MonthlyIncome
+		dataType: int64
+		formatString: 0
+		lineageTag: 4c4a440b-dcee-4780-8ae0-1c4ce23538bd
+		summarizeBy: sum
+		sourceColumn: MonthlyIncome
+
+		annotation SummarizationSetBy = Automatic
+
+	column MonthlyRate
+		dataType: int64
+		formatString: 0
+		lineageTag: 9f144191-3e8a-44a7-8721-e65fd76aa11e
+		summarizeBy: sum
+		sourceColumn: MonthlyRate
+
+		annotation SummarizationSetBy = Automatic
+
+	column NumCompaniesWorked
+		dataType: int64
+		formatString: 0
+		lineageTag: 0eab9f76-d988-4f48-b519-f11251706bc1
+		summarizeBy: sum
+		sourceColumn: NumCompaniesWorked
+
+		annotation SummarizationSetBy = Automatic
+
+	column PercentSalaryHike
+		dataType: int64
+		formatString: 0
+		lineageTag: 8a5ffccf-c349-42a6-9d33-d50992c70852
+		summarizeBy: sum
+		sourceColumn: PercentSalaryHike
+
+		annotation SummarizationSetBy = Automatic
+
+	column PerformanceRating
+		dataType: int64
+		formatString: 0
+		lineageTag: b4f5e5b3-c9c6-415f-b4e9-2bee7d029a1c
+		summarizeBy: sum
+		sourceColumn: PerformanceRating
+
+		annotation SummarizationSetBy = Automatic
+
+	column StandardHours
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 9b6ab665-541b-4036-b587-3c2047513b47
+		summarizeBy: sum
+		sourceColumn: StandardHours
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column StockOptionLevel
+		dataType: int64
+		formatString: 0
+		lineageTag: a633adf9-ce35-4b05-97f0-6009ac1d15cc
+		summarizeBy: sum
+		sourceColumn: StockOptionLevel
+
+		annotation SummarizationSetBy = Automatic
+
+	column TotalWorkingYears
+		dataType: int64
+		formatString: 0
+		lineageTag: c7db9478-4423-4faa-83b2-2bd4b4b4a7b1
+		summarizeBy: sum
+		sourceColumn: TotalWorkingYears
+
+		annotation SummarizationSetBy = Automatic
+
+	column TrainingTimesLastYear
+		dataType: int64
+		formatString: 0
+		lineageTag: 37e4e7d6-efa1-417e-a06f-f71023b5eee6
+		summarizeBy: sum
+		sourceColumn: TrainingTimesLastYear
+
+		annotation SummarizationSetBy = Automatic
+
+	column YearsAtCompany
+		dataType: int64
+		formatString: 0
+		lineageTag: 40d64c43-2045-47fc-9343-57bfa9874adc
+		summarizeBy: sum
+		sourceColumn: YearsAtCompany
+
+		annotation SummarizationSetBy = Automatic
+
+	column YearsInCurrentRole
+		dataType: int64
+		formatString: 0
+		lineageTag: c687bb1e-8fdd-4131-83bd-4306223532f8
+		summarizeBy: sum
+		sourceColumn: YearsInCurrentRole
+
+		annotation SummarizationSetBy = Automatic
+
+	column YearsSinceLastPromotion
+		dataType: int64
+		formatString: 0
+		lineageTag: 57ed1431-40fb-49b0-a376-25ff14513141
+		summarizeBy: sum
+		sourceColumn: YearsSinceLastPromotion
+
+		annotation SummarizationSetBy = Automatic
+
+	column YearsWithCurrManager
+		dataType: int64
+		formatString: 0
+		lineageTag: c4c2c0c7-9da3-405d-bd27-1055da12fdd0
+		summarizeBy: sum
+		sourceColumn: YearsWithCurrManager
+
+		annotation SummarizationSetBy = Automatic
+
+	partition fact_HR = m
+		mode: import
+		source =
+				let
+				    Source = RAW_HR_DATA,
+				    #"Removed Other Columns" = Table.SelectColumns(Source,{"Attrition", "DailyRate", "EmployeeCount", "EmployeeNumber", "HourlyRate", "MonthlyIncome", "MonthlyRate", "NumCompaniesWorked", "PercentSalaryHike", "PerformanceRating", "StandardHours", "StockOptionLevel", "TotalWorkingYears", "TrainingTimesLastYear", "YearsAtCompany", "YearsInCurrentRole", "YearsSinceLastPromotion", "YearsWithCurrManager"})
+				in
+				    #"Removed Other Columns"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

@@ -10,5 +10,16 @@ annotation __PBI_TimeIntelligenceEnabled = 1
 
 annotation PBI_ProTooling = ["DevMode"]
 
+annotation PBI_QueryOrder = ["RAW_HR_DATA","dim_Employee","dim_Job","dim_Satisfaction","fact_HR","dim_Date","_Measures"]
+
+ref table dim_Employee
+ref table dim_Job
+ref table dim_Satisfaction
+ref table fact_HR
+ref table dim_Date
+ref table DateTableTemplate_894e910c-5cd5-4cbf-ac1b-33f9a123d05f
+ref table LocalDateTable_cf3c17b1-ba66-47fd-968c-5c1159659b14
+ref table _Measures
+
 ref cultureInfo en-US
 
